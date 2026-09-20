@@ -497,12 +497,30 @@
     let batteryLevel = null;
     let audioContext = null;
 
-    // Extract Room Code from URL: ?room=SKATE-XXXX
+    // Extract Room Code from URL or localStorage: ?room=SKATE-XXXX
     const urlParams = new URLSearchParams(window.location.search);
-    const roomCode = urlParams.get('room') || generateRoomCode();
+    let roomCode = urlParams.get('room');
+    if (roomCode && roomCode.trim().length > 0) {
+      roomCode = roomCode.trim().toUpperCase();
+      localStorage.setItem('skatekids_child_room', roomCode);
+    } else {
+      roomCode = (localStorage.getItem('skatekids_child_room') || generateRoomCode()).toUpperCase();
+    }
+
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set('room', roomCode);
+      window.history.replaceState({}, '', u.toString());
+    } catch(e) {}
 
     function generateRoomCode() {
       return 'SKATE-' + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    // Restore cumulative distance if child phone reloaded
+    const savedDist = localStorage.getItem(`skate_dist_${roomCode}`);
+    if (savedDist) {
+      totalDistanceMeters = parseInt(savedDist, 10) || 0;
     }
 
     // ===== DOM =====
@@ -524,6 +542,9 @@
     const roomCodeEl      = document.getElementById('txtRoomCode');
 
     roomCodeEl.textContent = roomCode;
+    if (totalDistanceMeters > 0) {
+      liveDistance.textContent = `${totalDistanceMeters.toLocaleString('id-ID')} m`;
+    }
 
     // ===== HAVERSINE =====
     function calcDistance(lat1, lon1, lat2, lon2) {
@@ -614,6 +635,7 @@
       liveSpeed.textContent    = calculatedSpeed.toFixed(1);
       liveDistance.textContent = `${totalDistanceMeters.toLocaleString('id-ID')} m`;
       liveAccuracy.textContent = `± ${Math.round(coords.accuracy * 10) / 10} m`;
+      try { localStorage.setItem(`skate_dist_${roomCode}`, totalDistanceMeters); } catch(e) {}
 
       // Send to Firebase
       if (!isFirebaseReady) return;
