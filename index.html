@@ -2373,8 +2373,11 @@ class TelemetryEngine {
       this.currentHeading = Math.round(this.calculateBearing(this.previousLat, this.previousLng, lat, lng));
     }
 
-    // Distance accumulation (Filter micro-GPS jitter < 0.8 meter)
-    if (this.previousLat !== null) {
+    // Distance accumulation (sync from child if available, or calculate from consecutive fixes)
+    if (data.distanceMeters !== undefined && data.distanceMeters > this.totalDistanceMeters) {
+      this.totalDistanceMeters = data.distanceMeters;
+      this.totalDistanceKm = Number((this.totalDistanceMeters / 1000).toFixed(2));
+    } else if (this.previousLat !== null) {
       const deltaMeters = this.calculateHaversineDistance(this.previousLat, this.previousLng, lat, lng);
       if (deltaMeters >= 0.8) {
         this.totalDistanceMeters += Math.round(deltaMeters);
@@ -2785,14 +2788,41 @@ document.addEventListener('DOMContentLoaded', async () => {
   let lastReportedLap = 0;
   const telemetryLogs = [];
 
-  // Pairing State
-  let currentRoomCode = generateRoomCode();
-  let isChildConnected = false;
-  let firebaseListener = null;
+  // Pairing State - Persistent across reloads
+  function getStoredRoomCode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromUrl = urlParams.get('room');
+    if (fromUrl && fromUrl.trim().length > 0) {
+      const code = fromUrl.trim().toUpperCase();
+      localStorage.setItem('skatekids_parent_room', code);
+      return code;
+    }
+    const fromStorage = localStorage.getItem('skatekids_parent_room');
+    if (fromStorage && fromStorage.trim().length > 0) {
+      return fromStorage.trim().toUpperCase();
+    }
+    const newCode = generateRoomCode();
+    localStorage.setItem('skatekids_parent_room', newCode);
+    return newCode;
+  }
+
+  function syncUrlWithRoom(code) {
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set('room', code);
+      window.history.replaceState({}, '', u.toString());
+    } catch(e) {}
+  }
 
   function generateRoomCode() {
     return 'SKATE-' + Math.floor(1000 + Math.random() * 9000);
   }
+
+  let currentRoomCode = getStoredRoomCode();
+  syncUrlWithRoom(currentRoomCode);
+
+  let isChildConnected = false;
+  let firebaseListener = null;
 
   // DOM Elements
   const elLiveClock              = document.getElementById('liveClock');
@@ -3164,9 +3194,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data = snapshot.val();
       if (!data) return;
 
-      // Check data freshness (< 15 seconds old)
+      // Check data freshness (< 35 seconds old to prevent disconnect on momentary browser refresh)
       const age = Date.now() - (data._ts || 0);
-      const isFresh = age < 15000;
+      const isFresh = age < 35000;
 
       if (!isChildConnected && isFresh) {
         isChildConnected = true;
@@ -3184,7 +3214,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           isChildConnected = false;
           elGlobalConnIndicator.className = 'status-indicator offline';
           elConnStatusText.textContent = 'HP ANAK OFFLINE';
-          addAlertItem('HP Anak Terputus', 'Tidak ada data GPS dalam 15 detik terakhir', 'warn');
+          addAlertItem('HP Anak Terputus', 'Tidak ada data GPS dalam 35 detik terakhir', 'warn');
         }
         return;
       }
@@ -3234,8 +3264,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const childWeightVal  = parseInt(document.getElementById('inputChildWeight').value) || 32;
     const childMaxSpeed   = parseInt(document.getElementById('inputChildMaxSpeed').value) || 28;
 
-    // Generate new room code
+    // Generate new room code ONLY when explicitly clicking this button
     currentRoomCode = generateRoomCode();
+    localStorage.setItem('skatekids_parent_room', currentRoomCode);
+    localStorage.setItem('skatekids_child_name', childNameVal);
+    syncUrlWithRoom(currentRoomCode);
 
     // Update engine athlete
     engine.athlete.name        = childNameVal;
@@ -3389,16 +3422,40 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // =========================================================================
-  // INIT: Connect Firebase, start listening
+  // INIT: Connect Firebase, restore profile, and start listening
   // =========================================================================
   const fbOk = await initFirebase();
   updatePairingUrls();
 
+  // Restore saved child name from localStorage if available
+  const savedName = localStorage.getItem('skatekids_child_name');
+  if (savedName) {
+    engine.athlete.name = savedName;
+    elCurrentDeviceName.textContent = savedName;
+    elActiveChildLabel.textContent = `📱 ${savedName} (Menghubungkan...)`;
+    const inputName = document.getElementById('inputChildName');
+    if (inputName) inputName.value = savedName;
+  }
+
   if (fbOk) {
+    // Attempt to load profile from Firebase
+    try {
+      const snap = await get(ref(db, `rooms/${currentRoomCode}/profile`));
+      if (snap.exists()) {
+        const p = snap.val();
+        if (p.childName) {
+          engine.athlete.name = p.childName;
+          elCurrentDeviceName.textContent = p.childName;
+          elActiveChildLabel.textContent = `📱 ${p.childName} (Menunggu Sinyal GPS...)`;
+          localStorage.setItem('skatekids_child_name', p.childName);
+        }
+      }
+    } catch(e) {}
+
     listenToChildPhone(currentRoomCode);
     addAlertItem(
       '🟢 Firebase Terhubung',
-      `Siap menerima GPS dari HP anak. Kode: ${currentRoomCode}`,
+      `Sesi aktif dipulihkan. Kode: ${currentRoomCode}`,
       'info'
     );
   }
