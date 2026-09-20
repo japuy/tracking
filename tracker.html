@@ -11,6 +11,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- PWA & Mobile Background Capability -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#070a13">
+
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
@@ -439,9 +446,9 @@
         <span id="btnActionText">Memuat Firebase...</span>
       </button>
 
-      <div class="wake-lock-info">
-        <i class="fa-solid fa-mobile-screen"></i>
-        <span>Layar dijaga tetap aktif agar GPS tetap merekam di saku/armband</span>
+      <div class="wake-lock-info" style="color: #10b981; font-weight: 600;">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Mode Latar Belakang Siap — Layar bisa dikunci / HP di saku, GPS tetap memancar terus ke HP orang tua!</span>
       </div>
 
       <div class="firebase-status-bar">
@@ -583,7 +590,61 @@
       }
     }
     function releaseWakeLock() {
-      if (wakeLock) wakeLock.release().then(() => { wakeLock = null; });
+      if (wakeLock) {
+        wakeLock.release().then(() => { wakeLock = null; }).catch(() => {});
+      }
+    }
+
+    // Re-acquire WakeLock automatically when phone is unlocked
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible' && isTracking) {
+        await requestWakeLock();
+      }
+    });
+
+    // ===== SILENT BACKGROUND AUDIO & MEDIASESSION (Kunci Layar / Background Mode) =====
+    // Memutar audio hening tak bersuara dalam loop agar Android & iOS tidak mematikan
+    // proses JavaScript & GPS saat layar terkunci atau HP dimasukkan ke saku!
+    let bgAudioEl = null;
+
+    function startBackgroundAudio() {
+      try {
+        if (!bgAudioEl) {
+          // 1-detik silent WAV data URI
+          const silentWav = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+          bgAudioEl = new Audio(silentWav);
+          bgAudioEl.loop = true;
+          bgAudioEl.volume = 0.01;
+        }
+        bgAudioEl.play().catch(e => console.warn('Background audio:', e));
+
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: `${childName.textContent || 'Anak Saya'} - SkateKids Live ⛸️`,
+            artist: 'GPS Aktif di Latar Belakang',
+            album: 'Layar Terkunci / Di Saku Tetap Mengirim Posisi',
+            artwork: [{ src: 'https://cdn-icons-png.flaticon.com/512/3655/3655581.png', sizes: '512x512', type: 'image/png' }]
+          });
+          navigator.mediaSession.playbackState = 'playing';
+
+          navigator.mediaSession.setActionHandler('play', () => {
+            if (bgAudioEl) bgAudioEl.play();
+            navigator.mediaSession.playbackState = 'playing';
+          });
+          navigator.mediaSession.setActionHandler('pause', () => {
+            navigator.mediaSession.playbackState = 'paused';
+          });
+        }
+      } catch (err) {
+        console.warn('Silent audio err:', err);
+      }
+    }
+
+    function stopBackgroundAudio() {
+      try {
+        if (bgAudioEl) bgAudioEl.pause();
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
+      } catch(e) {}
     }
 
     // ===== CHIME (dipanggil orang tua) =====
@@ -674,6 +735,7 @@
         isTracking = true;
         startTime = Date.now();
         requestWakeLock();
+        startBackgroundAudio();
 
         btnToggle.className = 'btn-toggle-tracking stop';
         btnActionText.textContent = 'JEDA LATIHAN ⏸️';
@@ -686,6 +748,7 @@
           liveDuration.textContent = `${h}:${m}:${s}`;
         }, 1000);
 
+        // Continuous GPS Watch
         watchId = navigator.geolocation.watchPosition(
           (pos) => sendTelemetry(pos.coords),
           (err) => {
@@ -694,9 +757,23 @@
           },
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
+
+        // Periodic Background GPS Pulse: forces GPS fix even when phone screen is locked/in pocket
+        let bgGpsInterval = setInterval(() => {
+          if (isTracking && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => sendTelemetry(pos.coords),
+              (err) => {},
+              { enableHighAccuracy: true, timeout: 6000, maximumAge: 2000 }
+            );
+          } else {
+            clearInterval(bgGpsInterval);
+          }
+        }, 4000);
       } else {
         isTracking = false;
         releaseWakeLock();
+        stopBackgroundAudio();
         if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
         if (timerInterval) clearInterval(timerInterval);
 
