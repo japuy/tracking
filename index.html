@@ -17,20 +17,20 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-  <!-- Custom Styles -->
+  <!-- Custom Embedded Styles for Zero 404s & Perfect Responsiveness -->
   <style>
 /* ==========================================================================
-   SkateKids Track - Real-Time Child Inline Skate & Safety Monitor CSS
-   Theme: High-Tech Sporty Dark Glassmorphism / Kid Safety Telemetry
+   SkateKids Track - Premium Real-Time Child Inline Skate & Safety Monitor CSS
+   Theme: Sporty Dark Glassmorphism / Kid Safety Telemetry
    ========================================================================== */
 
 :root {
   /* Color Palette */
   --bg-base: #060911;
   --bg-surface: #0a0f1d;
-  --bg-card: rgba(13, 21, 38, 0.78);
-  --bg-card-hover: rgba(18, 30, 54, 0.88);
-  --bg-header: rgba(9, 15, 28, 0.88);
+  --bg-card: rgba(13, 21, 38, 0.82);
+  --bg-card-hover: rgba(18, 30, 54, 0.92);
+  --bg-header: rgba(9, 15, 28, 0.92);
   
   /* Borders & Highlights */
   --border-subtle: rgba(255, 255, 255, 0.08);
@@ -64,11 +64,19 @@
   --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Base Reset & Box Sizing */
+/* Base Reset & Smooth Scrolling */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  overflow-y: scroll !important;
+  overflow-x: hidden;
+  height: auto;
+  min-height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -76,14 +84,35 @@ body {
   background-color: var(--bg-base);
   color: var(--text-main);
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.07) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
     linear-gradient(180deg, #060911 0%, #0b1222 100%);
   background-attachment: fixed;
   min-height: 100vh;
+  height: auto;
   line-height: 1.5;
+  overflow-y: visible !important;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Sleek Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060911;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 254, 0.25);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 254, 0.5);
 }
 
 .mono-text {
@@ -96,8 +125,10 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  max-width: 1920px;
+  height: auto;
+  max-width: 1600px;
   margin: 0 auto;
+  overflow: visible;
 }
 
 /* ==========================================================================
@@ -107,75 +138,64 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 28px;
+  padding: 12px 24px;
   background: var(--bg-header);
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
   z-index: 1000;
-  gap: 20px;
+  gap: 16px;
 }
 
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  text-decoration: none;
 }
 
 .brand-icon {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.15));
-  border: 1px solid rgba(0, 242, 254, 0.4);
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
+  background: linear-gradient(135deg, var(--cyan-primary), var(--emerald-green));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cyan-primary);
-  font-size: 1.4rem;
+  color: #060911;
+  font-size: 1.35rem;
   box-shadow: var(--glow-cyan);
 }
 
-.pulse-icon {
-  animation: pulseRotate 4s ease-in-out infinite;
-}
-
-@keyframes pulseRotate {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.1); filter: brightness(1.3); }
-}
-
 .brand-info h1 {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  letter-spacing: -0.5px;
   color: var(--text-pure);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
 }
 
 .brand-info h1 span {
   color: var(--cyan-primary);
-  text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
 }
 
 .brand-badge {
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   color: var(--emerald-green);
-  display: block;
-  margin-top: -2px;
+  text-transform: uppercase;
 }
 
 .header-center {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.device-selector-wrapper,
-.route-selector-wrapper {
+.device-selector-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -186,40 +206,13 @@ body {
   font-size: 0.85rem;
 }
 
-.device-selector-wrapper label,
-.route-selector-wrapper label {
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-
-.custom-select {
-  background: transparent;
-  border: none;
-  color: var(--text-pure);
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.88rem;
-  outline: none;
-  cursor: pointer;
-  padding: 2px 4px;
-}
-
-.custom-select option {
-  background: #0d1527;
-  color: #fff;
-}
-
-/* Button Connect Child Phone in Header */
 .btn-connect-child {
   background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.2));
   border: 1px solid rgba(0, 242, 254, 0.5);
   color: var(--cyan-primary);
   font-weight: 700;
   font-size: 0.84rem;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -239,14 +232,14 @@ body {
 .header-status {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .status-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   padding: 6px 12px;
@@ -286,20 +279,20 @@ body {
 .time-widget {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
 /* ==========================================================================
-   Dashboard Layout Grid
+   Dashboard Grid & Main Content Layout
    ========================================================================== */
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: 320px 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-  padding: 24px 28px;
+  padding: 20px 24px;
   flex: 1;
 }
 
@@ -379,384 +372,22 @@ body {
 }
 
 /* ==========================================================================
-   Left Sidebar: Child Profile & Safety
+   Section 1: Top 4 KPI Metric Cards (Full Width Banner)
    ========================================================================== */
-.sidebar-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* Child Profile Card */
-.device-quick-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-
-.device-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.15));
-  border: 1px solid rgba(0, 242, 254, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: var(--cyan-primary);
-}
-
-.device-names h3 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text-pure);
-}
-
-.device-names p {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  background: rgba(10, 16, 30, 0.6);
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-subtle);
-  margin-bottom: 12px;
-}
-
-.stat-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.stat-pill i {
-  font-size: 1.1rem;
-}
-
-.icon-green { color: var(--emerald-green); }
-.icon-cyan { color: var(--cyan-primary); }
-.icon-amber { color: var(--amber-warning); }
-.icon-red { color: var(--rose-danger); }
-
-.stat-meta {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-label {
-  font-size: 0.62rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
-
-.stat-value {
-  font-size: 0.78rem;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--text-main);
-}
-
-/* Call Child Buzzer Button */
-.btn-call-child {
-  width: 100%;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  color: var(--amber-warning);
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: var(--transition-smooth);
-}
-
-.btn-call-child:hover {
-  background: rgba(245, 158, 11, 0.25);
-  box-shadow: var(--glow-amber);
-}
-
-/* Geofence Safety Card */
-.geofence-body {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px dashed rgba(16, 185, 129, 0.3);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-
-.geofence-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: var(--text-main);
-  margin-bottom: 6px;
-}
-
-.geofence-meta {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 6px;
-}
-
-/* Coordinates & Location */
-.coords-display {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.coord-item {
-  background: rgba(10, 16, 30, 0.6);
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border-subtle);
-}
-
-.coord-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  display: block;
-}
-
-.coord-value {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--cyan-primary);
-}
-
-.address-box {
-  background: rgba(0, 242, 254, 0.05);
-  border: 1px dashed rgba(0, 242, 254, 0.25);
-  border-radius: 8px;
-  padding: 10px 12px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 0.8rem;
-  color: var(--text-main);
-  margin-bottom: 12px;
-  line-height: 1.4;
-}
-
-.address-box i {
-  color: var(--cyan-primary);
-  margin-top: 3px;
-}
-
-.altitude-heading-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
-}
-
-.micro-stat {
-  background: rgba(10, 16, 30, 0.5);
-  padding: 6px 8px;
-  border-radius: 6px;
-  text-align: center;
-}
-
-.micro-label {
-  display: block;
-  font-size: 0.62rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
-
-.micro-value {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-pure);
-}
-
-/* Simulation Controls */
-.playback-btn-group {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: var(--transition-smooth);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #00f2fe, #38bdf8);
-  color: #070a12;
-  box-shadow: var(--glow-cyan);
-}
-
-.btn-primary:hover {
-  filter: brightness(1.15);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-main);
-  border: 1px solid var(--border-subtle);
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.btn-icon {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 4px;
-  font-size: 0.95rem;
-  transition: var(--transition-smooth);
-}
-
-.btn-icon:hover {
-  color: var(--cyan-primary);
-}
-
-.speed-multiplier-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.speed-multiplier-wrapper label {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.multiplier-chips {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-}
-
-.chip-btn {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  padding: 5px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.chip-btn:hover {
-  border-color: var(--cyan-primary);
-  color: var(--text-pure);
-}
-
-.chip-btn.active {
-  background: rgba(0, 242, 254, 0.15);
-  border-color: var(--cyan-primary);
-  color: var(--cyan-primary);
-}
-
-/* Alert Stream */
-.alert-stream {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 140px;
-  overflow-y: auto;
-}
-
-.alert-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  background: rgba(10, 16, 30, 0.6);
-  border-left: 3px solid var(--cyan-primary);
-}
-
-.alert-item.alert-warn {
-  border-left-color: var(--amber-warning);
-  background: rgba(245, 158, 11, 0.08);
-}
-
-.alert-item.alert-danger {
-  border-left-color: var(--rose-danger);
-  background: rgba(239, 68, 68, 0.1);
-  animation: shake 0.4s ease-in-out;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-.alert-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.alert-title {
-  font-weight: 600;
-  color: var(--text-pure);
-}
-
-.alert-time {
-  font-size: 0.65rem;
-  color: var(--text-dim);
-}
-
-/* ==========================================================================
-   Main Telemetry Workspace
-   ========================================================================== */
-.main-telemetry-area {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Top 4 KPI Metric Cards */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  width: 100%;
 }
 
 .metric-card {
-  padding: 18px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  border-radius: 16px;
 }
 
 .metric-card::before {
@@ -767,7 +398,7 @@ body {
   width: 100%;
   height: 3px;
   background: linear-gradient(90deg, transparent, var(--accent-color, var(--cyan-primary)), transparent);
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .metric-speed { --accent-color: var(--emerald-green); }
@@ -779,12 +410,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .metric-icon-box {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
   background: rgba(16, 185, 129, 0.15);
   border: 1px solid rgba(16, 185, 129, 0.3);
@@ -792,7 +423,7 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--emerald-green);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
 .metric-icon-box.cyan {
@@ -856,18 +487,18 @@ body {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .metric-value {
-  font-size: 2.2rem;
+  font-size: 2.1rem;
   font-weight: 800;
   color: var(--text-pure);
   line-height: 1;
 }
 
 .metric-unit {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-muted);
 }
@@ -879,18 +510,19 @@ body {
   font-size: 0.74rem;
   color: var(--text-muted);
   border-top: 1px solid var(--border-subtle);
-  padding-top: 10px;
+  padding-top: 8px;
 }
 
 .text-success { color: var(--emerald-green); }
 
 /* ==========================================================================
-   Map & Gauge Visualizer Row
+   Section 2: Primary Visualizer (Map on Left, Cockpit on Right)
    ========================================================================== */
 .visualizer-row {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 380px;
   gap: 20px;
+  align-items: start;
 }
 
 /* Map Card */
@@ -898,7 +530,7 @@ body {
   padding: 0;
   position: relative;
   overflow: hidden;
-  height: 520px;
+  height: 540px;
   display: flex;
   flex-direction: column;
 }
@@ -908,7 +540,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(10, 16, 30, 0.85);
+  background: rgba(10, 16, 30, 0.9);
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--border-subtle);
   z-index: 400;
@@ -921,7 +553,7 @@ body {
 }
 
 .map-title {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--text-pure);
   display: flex;
@@ -934,7 +566,7 @@ body {
 }
 
 .map-coords-badge {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-family: var(--font-mono);
   color: var(--cyan-primary);
   background: rgba(0, 242, 254, 0.1);
@@ -972,7 +604,7 @@ body {
   color: var(--text-muted);
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 5px 10px;
   cursor: pointer;
   transition: var(--transition-smooth);
 }
@@ -1012,6 +644,7 @@ body {
   flex: 1;
   width: 100%;
   height: 100%;
+  min-height: 460px;
   background: #090e1a;
 }
 
@@ -1038,14 +671,14 @@ body {
 /* Map Floating Legend */
 .map-floating-overlay {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
+  bottom: 16px;
+  left: 16px;
   z-index: 400;
-  background: rgba(10, 16, 30, 0.85);
+  background: rgba(10, 16, 30, 0.88);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 7px 12px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1070,70 +703,119 @@ body {
 .legend-orange { background: var(--amber-warning); }
 .legend-red { background: var(--rose-danger); }
 
-/* Skater Marker Custom CSS */
-.vehicle-marker-wrapper {
-  position: relative;
+/* Right Cockpit Panel */
+.cockpit-side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Child Profile Card */
+.device-quick-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.device-avatar {
   width: 44px;
   height: 44px;
-}
-
-.vehicle-radar-ping {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 2px solid var(--cyan-primary);
-  background: rgba(0, 242, 254, 0.2);
-  animation: radarBeacon 2s infinite ease-out;
-  pointer-events: none;
-}
-
-@keyframes radarBeacon {
-  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
-}
-
-.vehicle-marker-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(135deg, #00f2fe, #10b981);
-  border: 2px solid #ffffff;
-  border-radius: 50%;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.15));
+  border: 1px solid rgba(0, 242, 254, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #070a12;
+  font-size: 1.3rem;
+  color: var(--cyan-primary);
+}
+
+.device-names h3 {
   font-size: 1rem;
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.7);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-weight: 700;
+  color: var(--text-pure);
 }
 
-.vehicle-heading-arrow {
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 7px solid #ffffff;
+.device-names p {
+  font-size: 0.74rem;
+  color: var(--text-muted);
 }
 
-/* ==========================================================================
-   Speedometer HUD & Chart Panel for Inline Skating
-   ========================================================================== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(10, 16, 30, 0.6);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 12px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-pill i {
+  font-size: 1rem;
+}
+
+.icon-green { color: var(--emerald-green); }
+.icon-cyan { color: var(--cyan-primary); }
+.icon-amber { color: var(--amber-warning); }
+.icon-red { color: var(--rose-danger); }
+
+.stat-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+/* Call Child Buzzer Button */
+.btn-call-child {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: var(--amber-warning);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+  transition: var(--transition-smooth);
+}
+
+.btn-call-child:hover {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #000;
+  box-shadow: var(--glow-amber);
+  transform: translateY(-1px);
+}
+
+/* Speedometer Gauge Panel */
 .gauge-panel-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .unit-switch {
@@ -1152,6 +834,7 @@ body {
   font-weight: 700;
   padding: 3px 8px;
   cursor: pointer;
+  transition: var(--transition-smooth);
 }
 
 .unit-btn.active {
@@ -1159,55 +842,55 @@ body {
   color: #070a12;
 }
 
-/* Circular Gauge */
 .speedometer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  padding: 10px 0;
+  padding: 6px 0;
 }
 
 .speedometer-svg-wrapper {
   position: relative;
   width: 220px;
-  height: 220px;
+  height: 180px;
+  overflow: hidden;
 }
 
 .speedometer-svg {
-  width: 100%;
-  height: 100%;
+  width: 220px;
+  height: 220px;
   transform: rotate(135deg);
-  overflow: visible;
+  transform-origin: center;
 }
 
 .gauge-bg-arc {
   fill: none;
   stroke: rgba(255, 255, 255, 0.08);
   stroke-width: 14;
-  stroke-dasharray: 447;
-  stroke-dashoffset: 149;
   stroke-linecap: round;
+  stroke-dasharray: 447;
+  stroke-dashoffset: 0;
 }
 
 .gauge-warning-arc {
   fill: none;
-  stroke: rgba(239, 68, 68, 0.25);
+  stroke: rgba(239, 68, 68, 0.35);
   stroke-width: 14;
-  stroke-dasharray: 447;
-  stroke-dashoffset: 380;
   stroke-linecap: round;
+  stroke-dasharray: 447;
+  stroke-dashoffset: 335;
 }
 
 .gauge-fill-arc {
   fill: none;
   stroke: var(--cyan-primary);
   stroke-width: 14;
+  stroke-linecap: round;
   stroke-dasharray: 447;
   stroke-dashoffset: 447;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.6));
-  transition: stroke-dashoffset 0.35s ease-out, stroke 0.3s;
+  transition: stroke-dashoffset 0.35s ease, stroke 0.35s ease;
+  filter: drop-shadow(0 0 6px var(--cyan-primary));
 }
 
 .gauge-center-text {
@@ -1217,32 +900,31 @@ body {
 }
 
 .gauge-digit {
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 800;
   fill: var(--text-pure);
 }
 
 .gauge-unit {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
   fill: var(--cyan-primary);
 }
 
 .gauge-substatus {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
   fill: var(--text-muted);
 }
 
-/* Needle */
 .gauge-needle {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 4px;
-  height: 80px;
+  width: 3px;
+  height: 72px;
   background: linear-gradient(to top, #ffffff, var(--cyan-primary));
   border-radius: 2px;
   transform-origin: bottom center;
@@ -1257,8 +939,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   background: #0d1628;
   border: 2px solid var(--cyan-primary);
   border-radius: 50%;
@@ -1270,30 +952,29 @@ body {
 .speedometer-scale {
   display: flex;
   justify-content: space-between;
-  width: 210px;
-  margin-top: -15px;
+  width: 200px;
+  margin-top: -10px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-dim);
 }
 
-/* Speed Trend Chart */
 .speed-chart-wrapper {
-  margin-top: 15px;
+  margin-top: 10px;
   background: rgba(10, 16, 30, 0.6);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px 12px;
 }
 
 .chart-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .chart-peak {
@@ -1304,21 +985,29 @@ body {
 .chart-canvas-box {
   position: relative;
   width: 100%;
-  height: 110px;
+  height: 90px;
 }
 
 /* ==========================================================================
-   Telemetry Log Table & Export Section
-   ========================================================================= */
+   Section 3: Lower Data & Control Grid (Table on Left, Controls on Right)
+   ========================================================================== */
+.lower-data-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Telemetry Log Table */
 .telemetry-log-card {
-  padding: 20px;
+  padding: 18px 20px;
 }
 
 .table-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -1327,7 +1016,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-pure);
 }
@@ -1337,23 +1026,23 @@ body {
 }
 
 .table-count {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-dim);
 }
 
 .table-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .btn-outline {
   background: transparent;
   border: 1px solid var(--border-subtle);
   color: var(--text-main);
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 8px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
@@ -1376,7 +1065,7 @@ body {
 
 .table-responsive {
   overflow-x: auto;
-  max-height: 240px;
+  max-height: 260px;
 }
 
 .telemetry-table {
@@ -1392,7 +1081,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  padding: 10px 14px;
+  padding: 9px 12px;
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
@@ -1400,7 +1089,7 @@ body {
 }
 
 .telemetry-table td {
-  padding: 9px 14px;
+  padding: 8px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   color: var(--text-main);
 }
@@ -1409,113 +1098,307 @@ body {
   background: rgba(0, 242, 254, 0.04);
 }
 
+/* Right Safety & Controls Column */
+.safety-controls-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Geofence Safety Card */
+.geofence-body {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px dashed rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.geofence-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.geofence-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 6px;
+}
+
+/* Coordinates & Location */
+.coords-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.coord-item {
+  background: rgba(10, 16, 30, 0.6);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+}
+
+.coord-label {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.coord-value {
+  font-size: 0.8rem;
+  color: var(--cyan-primary);
+  font-weight: 700;
+}
+
+.address-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  background: rgba(10, 16, 30, 0.5);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 8px;
+}
+
+.altitude-heading-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.micro-stat {
+  background: rgba(10, 16, 30, 0.6);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+}
+
+.micro-label {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.micro-value {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-icon:hover {
+  color: var(--cyan-primary);
+}
+
+/* Session Controls */
+.playback-btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn {
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f2fe, #38bdf8);
+  color: #070a12;
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Alert Stream */
+.alert-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  background: rgba(10, 16, 30, 0.6);
+  border-left: 3px solid var(--cyan-primary);
+}
+
+.alert-item.alert-warn {
+  border-left-color: var(--amber-warning);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.alert-item.alert-danger {
+  border-left-color: var(--rose-danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-title {
+  font-weight: 600;
+  color: var(--text-pure);
+}
+
+.alert-time {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
 /* ==========================================================================
    Pairing Modal Dialog Styles
    ========================================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(6, 9, 17, 0.85);
+  background: rgba(6, 9, 17, 0.88);
   backdrop-filter: blur(16px);
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   z-index: 2000;
-  animation: fadeIn 0.2s ease-out;
+  padding: 20px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modal-card {
+.pairing-modal-card {
   background: #0d1527;
-  border: 1px solid rgba(0, 242, 254, 0.3);
+  border: 1px solid var(--border-glow);
   border-radius: 20px;
   width: 100%;
-  max-width: 620px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), var(--glow-cyan);
-  overflow: hidden;
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 680px;
+  padding: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 254, 0.15);
+  animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .modal-header {
-  padding: 18px 24px;
-  background: rgba(15, 23, 42, 0.8);
-  border-bottom: 1px solid var(--border-subtle);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.modal-title-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.modal-title-group i {
-  font-size: 1.5rem;
-}
-
-.modal-title-group h3 {
-  font-size: 1.1rem;
+.modal-title-group h2 {
+  font-size: 1.25rem;
   font-weight: 800;
   color: var(--text-pure);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.modal-subtitle {
-  font-size: 0.75rem;
+.modal-title-group p {
+  font-size: 0.82rem;
   color: var(--text-muted);
+  margin-top: 4px;
 }
 
 .btn-close-modal {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
   color: var(--text-muted);
-  font-size: 1.6rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: var(--transition-smooth);
 }
 
 .btn-close-modal:hover {
-  color: var(--rose-danger);
-}
-
-.modal-body {
-  padding: 24px;
+  color: #fff;
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--rose-danger);
 }
 
 .pairing-content {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 240px 1fr;
   gap: 24px;
+  align-items: start;
 }
 
 .qr-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  background: #080d1a;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 16px;
 }
 
 .qr-box {
-  width: 190px;
-  height: 190px;
+  width: 200px;
+  height: 200px;
   background: #ffffff;
-  border-radius: 12px;
-  padding: 8px;
+  border-radius: 10px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .qr-box img {
@@ -1524,24 +1407,26 @@ body {
   object-fit: contain;
 }
 
-.room-code-tag {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 700;
+.room-code-badge {
+  margin-top: 12px;
+  background: rgba(0, 242, 254, 0.15);
+  border: 1px solid var(--cyan-primary);
   color: var(--cyan-primary);
-  background: rgba(0, 242, 254, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 242, 254, 0.25);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 5px 14px;
+  border-radius: 8px;
+  letter-spacing: 2px;
 }
 
 .conn-sync-status {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--amber-warning);
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.7rem;
-  color: var(--amber-warning);
-  text-align: center;
 }
 
 .conn-sync-status.active {
@@ -1551,19 +1436,87 @@ body {
 .pairing-details {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 600;
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.step-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cyan-primary);
+  color: #070a13;
+  font-weight: 800;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-desc h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.step-desc p {
+  font-size: 0.78rem;
   color: var(--text-muted);
-  text-transform: uppercase;
+  margin-top: 2px;
 }
 
-.copy-link-group {
+.input-copy-group {
   display: flex;
   gap: 8px;
+  margin-top: 6px;
+}
+
+.input-copy-group input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  outline: none;
+}
+
+.btn-copy {
+  background: rgba(0, 242, 254, 0.15);
+  border: 1px solid var(--cyan-primary);
+  color: var(--cyan-primary);
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+
+.btn-copy:hover {
+  background: var(--cyan-primary);
+  color: #070a13;
+}
+
+.register-child-form {
+  background: rgba(8, 13, 26, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .custom-input {
@@ -1603,12 +1556,6 @@ body {
   filter: brightness(1.1);
 }
 
-.modal-divider {
-  border: 0;
-  border-top: 1px solid var(--border-subtle);
-  margin: 6px 0;
-}
-
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1633,12 +1580,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 28px;
+  padding: 14px 24px;
   background: var(--bg-header);
   border-top: 1px solid var(--border-subtle);
   font-size: 0.75rem;
   color: var(--text-dim);
-  margin-top: auto;
+  margin-top: 10px;
 }
 
 .toggle-audio-label {
@@ -1656,15 +1603,18 @@ body {
 /* ==========================================================================
    Responsive Breakpoints
    ========================================================================== */
-@media (max-width: 1280px) {
-  .dashboard-grid {
+@media (max-width: 1200px) {
+  .visualizer-row {
     grid-template-columns: 1fr;
   }
-  .visualizer-row {
+  .lower-data-grid {
     grid-template-columns: 1fr;
   }
   .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .map-container-card {
+    height: 440px;
   }
 }
 
@@ -1674,27 +1624,30 @@ body {
     align-items: flex-start;
     padding: 14px;
   }
+  .header-center {
+    width: 100%;
+    justify-content: space-between;
+  }
   .dashboard-grid {
-    padding: 14px;
+    padding: 12px;
   }
   .metrics-grid {
     grid-template-columns: 1fr;
   }
   .map-container-card {
-    height: 380px;
-  }
-  .playback-btn-group {
-    grid-template-columns: 1fr;
+    height: 360px;
   }
   .pairing-content {
     grid-template-columns: 1fr;
   }
-  .qr-container {
-    margin-bottom: 12px;
+  .app-footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
   }
 }
 
-</style>
+  </style>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -1739,293 +1692,201 @@ body {
 
     <!-- Main Dashboard Layout -->
     <main class="dashboard-grid">
-      <!-- Left Sidebar: Child Profile & Real Safety Monitoring -->
-      <aside class="sidebar-panel">
-        <!-- Child Athlete Profile Card -->
-        <div class="glass-card device-profile-card">
-          <div class="card-header">
-            <span class="card-title"><i class="fa-solid fa-user-astronaut"></i> Profil Atlet Cilik</span>
-            <span class="badge badge-neutral" id="skateActivityBadge">STANDBY</span>
+      <!-- Section 1: 4 Key Skating Metrics (Full-Width Top Banner) -->
+      <section class="metrics-grid">
+        <!-- Metric 1: Kecepatan Meluncur (Speedometer) -->
+        <div class="glass-card metric-card metric-speed">
+          <div class="metric-top">
+            <div class="metric-icon-box">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <span class="metric-tag" id="speedStatusTag">STANDBY</span>
           </div>
-          <div class="device-quick-info">
-            <div class="device-avatar" id="deviceAvatarIcon">
-              <i class="fa-solid fa-person-skating"></i>
-            </div>
-            <div class="device-names">
-              <h3 id="currentDeviceName">Anak Saya</h3>
-              <p id="currentDevicePlate" class="mono-text">Sepatu Roda / Inline Skate</p>
-            </div>
+          <div class="metric-body">
+            <span class="metric-value mono-text" id="metricSpeedValue">0.0</span>
+            <span class="metric-unit" id="metricSpeedUnit">km/jam</span>
           </div>
-          
-          <div class="stats-row">
-            <div class="stat-pill">
-              <i class="fa-solid fa-battery-three-quarters icon-green"></i>
-              <div class="stat-meta">
-                <span class="stat-label">Baterai HP</span>
-                <span class="stat-value" id="batteryLevel">--%</span>
-              </div>
-            </div>
-            <div class="stat-pill">
-              <i class="fa-solid fa-signal icon-cyan"></i>
-              <div class="stat-meta">
-                <span class="stat-label">Sinyal GPS</span>
-                <span class="stat-value" id="signalStrength">-- dBm</span>
-              </div>
-            </div>
-            <div class="stat-pill">
-              <i class="fa-solid fa-heart-pulse icon-red"></i>
-              <div class="stat-meta">
-                <span class="stat-label">Detak Jantung</span>
-                <span class="stat-value" id="heartRateValue">-- BPM</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Child Calling / Ping Buzzer -->
-          <button class="btn btn-call-child" id="btnPingChild" title="Kirim sinyal dering ke HP anak">
-            <i class="fa-solid fa-bell-concierge"></i>
-            <span>Panggil Anak (Bunyikan HP Anak)</span>
-          </button>
-        </div>
-
-        <!-- Safety Zone (Geofence) Card -->
-        <div class="glass-card geofence-card">
-          <div class="card-header">
-            <span class="card-title"><i class="fa-solid fa-shield-halved"></i> Zona Aman Latihan</span>
-            <span class="badge badge-success" id="geofenceStatusBadge">AKTIF</span>
-          </div>
-          <div class="geofence-body">
-            <div class="geofence-indicator">
-              <i class="fa-solid fa-circle-check text-success"></i>
-              <span id="geofenceText">Zona aman radius <span id="geofenceRadiusText">200m</span> dari titik awal meluncur.</span>
-            </div>
-            <div class="geofence-meta">
-              <span>Jarak ke Titik Awal: <strong class="mono-text" id="distanceToParent">0 meter</strong></span>
-            </div>
+          <div class="metric-footer">
+            <span>Maks: <strong id="metricMaxSpeed" class="mono-text">0.0 km/jam</strong></span>
+            <span>Rata-rata: <strong id="metricAvgSpeed" class="mono-text">0.0 km/jam</strong></span>
           </div>
         </div>
 
-        <!-- Real Coordinates & Location Card -->
-        <div class="glass-card location-card">
-          <div class="card-header">
-            <span class="card-title"><i class="fa-solid fa-location-dot"></i> Titik Koordinat GPS Nyata</span>
-            <button class="btn-icon" id="btnCopyCoords" title="Salin Koordinat"><i class="fa-regular fa-copy"></i></button>
+        <!-- Metric 2: Total Jarak Latihan -->
+        <div class="glass-card metric-card metric-distance">
+          <div class="metric-top">
+            <div class="metric-icon-box cyan">
+              <i class="fa-solid fa-person-running"></i>
+            </div>
+            <span class="metric-tag cyan">JARAK LATIHAN</span>
           </div>
-          <div class="coords-display">
-            <div class="coord-item">
-              <span class="coord-label">Latitude</span>
-              <span class="coord-value mono-text" id="valLatitude">--.------</span>
-            </div>
-            <div class="coord-item">
-              <span class="coord-label">Longitude</span>
-              <span class="coord-value mono-text" id="valLongitude">---.------</span>
-            </div>
+          <div class="metric-body">
+            <span class="metric-value mono-text" id="metricTotalDistance">0</span>
+            <span class="metric-unit" id="distanceUnitLabel">meter</span>
           </div>
-          <div class="address-box">
-            <i class="fa-solid fa-map-pin"></i>
-            <span id="currentAddress">Menunggu HP anak terhubung & mengirim sinyal GPS...</span>
-          </div>
-          <div class="altitude-heading-row">
-            <div class="micro-stat">
-              <span class="micro-label">Arah Luncur</span>
-              <span class="micro-value mono-text" id="valHeading">--°</span>
-            </div>
-            <div class="micro-stat">
-              <span class="micro-label">Akurasi GPS</span>
-              <span class="micro-value mono-text" id="valAccuracy">&plusmn; -- m</span>
-            </div>
-            <div class="micro-stat">
-              <span class="micro-label">Elevasi</span>
-              <span class="micro-value mono-text" id="valAltitude">-- m</span>
-            </div>
+          <div class="metric-footer">
+            <span>Setara: <strong id="metricDistanceKm" class="mono-text">0.00 km</strong></span>
+            <span class="text-success"><i class="fa-solid fa-award"></i> Akumulasi Riil</span>
           </div>
         </div>
 
-        <!-- Session Controls Card (Clean, 0 Simulation) -->
-        <div class="glass-card controls-card">
-          <div class="card-header">
-            <span class="card-title"><i class="fa-solid fa-sliders"></i> Kontrol Sesi Latihan</span>
-            <span class="badge badge-neutral" id="simStatusBadge">REAL LIVE</span>
-          </div>
-          <div class="playback-btn-group" style="grid-template-columns: 1fr 1fr;">
-            <button id="btnCenterMap" class="btn btn-primary" title="Pusatkan Kamera ke Posisi Anak">
-              <i class="fa-solid fa-crosshairs"></i> Pusatkan
-            </button>
-            <button id="btnRestartSession" class="btn btn-secondary" title="Mulai Ulang Hitungan Latihan">
-              <i class="fa-solid fa-arrow-rotate-left"></i> Reset Sesi
+        <!-- Metric 3: Penghitung Putaran (Lap Counter) -->
+        <div class="glass-card metric-card metric-trip">
+          <div class="metric-top">
+            <div class="metric-icon-box amber">
+              <i class="fa-solid fa-flag-checkered"></i>
+            </div>
+            <button class="btn-mini-reset" id="btnResetTrip" title="Reset Hitungan Putaran">
+              <i class="fa-solid fa-arrow-rotate-right"></i> Reset
             </button>
           </div>
-        </div>
-
-        <!-- Safety & Incident Stream -->
-        <div class="glass-card alerts-card">
-          <div class="card-header">
-            <span class="card-title"><i class="fa-solid fa-bell"></i> Pemberitahuan Keamanan</span>
-            <span id="alertCountBadge" class="badge badge-neutral">Normal</span>
+          <div class="metric-body">
+            <span class="metric-value mono-text" id="metricLapCount">0</span>
+            <span class="metric-unit">Putaran (Laps)</span>
           </div>
-          <div class="alert-stream" id="alertStream">
-            <div class="alert-item alert-info">
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="alert-content">
-                <span class="alert-title">Sistem Siap Digunakan</span>
-                <span class="alert-time">Klik "+ Hubungkan HP Anak" untuk mulai melacak secara live</span>
-              </div>
-            </div>
+          <div class="metric-footer">
+            <span>Waktu Lap Terakhir: <strong id="lastLapTime" class="mono-text">--:-- dtk</strong></span>
+            <span>Terbaik: <strong class="text-success mono-text" id="bestLapTime">--:-- dtk</strong></span>
           </div>
         </div>
-      </aside>
 
-      <!-- Center & Right Workspace -->
-      <section class="main-telemetry-area">
-        <!-- 4 Key Skating Metrics Row: Speed, Distance, Lap Counter, Fitness -->
-        <div class="metrics-grid">
-          <!-- Metric 1: Kecepatan Meluncur (Speedometer) -->
-          <div class="glass-card metric-card metric-speed">
-            <div class="metric-top">
-              <div class="metric-icon-box">
-                <i class="fa-solid fa-bolt"></i>
-              </div>
-              <span class="metric-tag" id="speedStatusTag">STANDBY</span>
+        <!-- Metric 4: Kebugaran & Durasi -->
+        <div class="glass-card metric-card metric-time">
+          <div class="metric-top">
+            <div class="metric-icon-box purple">
+              <i class="fa-solid fa-fire"></i>
             </div>
-            <div class="metric-body">
-              <span class="metric-value mono-text" id="metricSpeedValue">0.0</span>
-              <span class="metric-unit" id="metricSpeedUnit">km/jam</span>
-            </div>
-            <div class="metric-footer">
-              <span>Maks: <strong id="metricMaxSpeed" class="mono-text">0.0 km/jam</strong></span>
-              <span>Rata2: <strong id="metricAvgSpeed" class="mono-text">0.0 km/jam</strong></span>
-            </div>
+            <span class="metric-tag purple">KEBUGARAN</span>
           </div>
-
-          <!-- Metric 2: Total Jarak Latihan (Jarak Tempuh Riil) -->
-          <div class="glass-card metric-card metric-distance">
-            <div class="metric-top">
-              <div class="metric-icon-box cyan">
-                <i class="fa-solid fa-person-running"></i>
-              </div>
-              <span class="metric-tag cyan">JARAK LATIHAN</span>
-            </div>
-            <div class="metric-body">
-              <span class="metric-value mono-text" id="metricTotalDistance">0</span>
-              <span class="metric-unit" id="distanceUnitLabel">meter</span>
-            </div>
-            <div class="metric-footer">
-              <span>Setara: <strong id="metricDistanceKm" class="mono-text">0.00 km</strong></span>
-              <span class="icon-muted"><i class="fa-solid fa-award"></i> Akumulasi Riil</span>
-            </div>
+          <div class="metric-body">
+            <span class="metric-value mono-text" id="metricCalories">0</span>
+            <span class="metric-unit">kkal terbakar</span>
           </div>
+          <div class="metric-footer">
+            <span>Meluncur: <strong id="metricTripDuration" class="mono-text">00:00:00</strong></span>
+            <span>Istirahat: <strong id="metricIdleDuration" class="mono-text">00:00:00</strong></span>
+          </div>
+        </div>
+      </section>
 
-          <!-- Metric 3: Penghitung Putaran (Lap Counter Riil) -->
-          <div class="glass-card metric-card metric-trip">
-            <div class="metric-top">
-              <div class="metric-icon-box amber">
-                <i class="fa-solid fa-flag-checkered"></i>
+      <!-- Section 2: Interactive Map & Live Cockpit Row -->
+      <section class="visualizer-row">
+        <!-- Left: Main Interactive Map -->
+        <div class="glass-card map-container-card">
+          <div class="map-toolbar">
+            <div class="map-toolbar-left">
+              <span class="map-title"><i class="fa-solid fa-location-crosshairs"></i> Posisi Nyata Anak di Peta</span>
+              <span class="map-coords-badge" id="mapLiveBadge">
+                <i class="fa-solid fa-circle pulse-dot-small"></i> <span id="mapHeadingBadge">Menunggu GPS...</span>
+              </span>
+            </div>
+            <div class="map-toolbar-right">
+              <!-- Map Layer Switcher Buttons -->
+              <div class="map-layer-toggles">
+                <button class="map-layer-btn active" data-layer="dark" title="Peta Gelap">Dark</button>
+                <button class="map-layer-btn" data-layer="osm" title="Peta Standar">Street</button>
+                <button class="map-layer-btn" data-layer="satellite" title="Satelit Esri">Satelit</button>
               </div>
-              <button class="btn-mini-reset" id="btnResetTrip" title="Reset Hitungan Putaran">
-                <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+              <!-- Follow Mode Toggle -->
+              <button class="map-tool-btn active" id="btnToggleFollow" title="Kunci Kamera ke Anak">
+                <i class="fa-solid fa-crosshairs"></i>
+              </button>
+              <!-- Clear Trail -->
+              <button class="map-tool-btn" id="btnClearTrail" title="Bersihkan Jejak Lintasan">
+                <i class="fa-solid fa-eraser"></i>
               </button>
             </div>
-            <div class="metric-body">
-              <span class="metric-value mono-text" id="metricLapCount">0</span>
-              <span class="metric-unit">Putaran (Laps)</span>
-            </div>
-            <div class="metric-footer">
-              <span>Waktu Lap Terakhir: <strong id="lastLapTime" class="mono-text">--:-- dtk</strong></span>
-              <span>Terbaik: <strong class="text-success mono-text" id="bestLapTime">--:-- dtk</strong></span>
-            </div>
           </div>
 
-          <!-- Metric 4: Kebugaran & Waktu Latihan -->
-          <div class="glass-card metric-card metric-time">
-            <div class="metric-top">
-              <div class="metric-icon-box purple">
-                <i class="fa-solid fa-fire"></i>
-              </div>
-              <span class="metric-tag purple">KEBUGARAN</span>
+          <!-- Leaflet Map Mount Point -->
+          <div id="map" class="map-viewport"></div>
+
+          <!-- Floating Map Legend -->
+          <div class="map-floating-overlay">
+            <div class="legend-item">
+              <span class="legend-color legend-green"></span> <span>0-12 km/h (Santai)</span>
             </div>
-            <div class="metric-body">
-              <span class="metric-value mono-text" id="metricCalories">0</span>
-              <span class="metric-unit">kkal terbakar</span>
+            <div class="legend-item">
+              <span class="legend-color legend-blue"></span> <span>13-22 km/h (Latihan)</span>
             </div>
-            <div class="metric-footer">
-              <span>Meluncur: <strong id="metricTripDuration" class="mono-text">00:00:00</strong></span>
-              <span>Istirahat: <strong id="metricIdleDuration" class="mono-text">00:00:00</strong></span>
+            <div class="legend-item">
+              <span class="legend-color legend-orange"></span> <span>23-28 km/h (Cepat)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color legend-red"></span> <span>&gt; 28 km/h (Sprint)</span>
             </div>
           </div>
         </div>
 
-        <!-- Interactive Map & Gauge Visualization Row -->
-        <div class="visualizer-row">
-          <!-- Left: Main Interactive Map Viewport -->
-          <div class="glass-card map-container-card">
-            <div class="map-toolbar">
-              <div class="map-toolbar-left">
-                <span class="map-title"><i class="fa-solid fa-location-crosshairs"></i> Posisi Nyata Anak di Peta</span>
-                <span class="map-coords-badge" id="mapLiveBadge">
-                  <i class="fa-solid fa-circle pulse-dot-small"></i> <span id="mapHeadingBadge">Menunggu GPS...</span>
-                </span>
+        <!-- Right: Cockpit Side Panel (Athlete Profile, Buzzer & Speedometer) -->
+        <div class="cockpit-side-panel">
+          <!-- Athlete Quick Profile & Call Child Card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-user-astronaut"></i> Profil Atlet Cilik</span>
+              <span class="badge badge-neutral" id="skateActivityBadge">STANDBY</span>
+            </div>
+            <div class="device-quick-info">
+              <div class="device-avatar" id="deviceAvatarIcon">
+                <i class="fa-solid fa-person-skating"></i>
               </div>
-              <div class="map-toolbar-right">
-                <!-- Map Layer Switcher Buttons -->
-                <div class="map-layer-toggles">
-                  <button class="map-layer-btn active" data-layer="dark" title="Peta Gelap">Dark</button>
-                  <button class="map-layer-btn" data-layer="osm" title="Peta Standar">Street</button>
-                  <button class="map-layer-btn" data-layer="satellite" title="Satelit Esri">Satelit</button>
+              <div class="device-names">
+                <h3 id="currentDeviceName">Anak Saya</h3>
+                <p id="currentDevicePlate" class="mono-text">Sepatu Roda / Inline Skate</p>
+              </div>
+            </div>
+            
+            <div class="stats-row">
+              <div class="stat-pill">
+                <i class="fa-solid fa-battery-three-quarters icon-green"></i>
+                <div class="stat-meta">
+                  <span class="stat-label">Baterai HP</span>
+                  <span class="stat-value" id="batteryLevel">--%</span>
                 </div>
-                <!-- Follow Mode Toggle -->
-                <button class="map-tool-btn active" id="btnToggleFollow" title="Kunci Kamera ke Anak">
-                  <i class="fa-solid fa-crosshairs"></i>
-                </button>
-                <!-- Clear Trail -->
-                <button class="map-tool-btn" id="btnClearTrail" title="Bersihkan Jejak Lintasan">
-                  <i class="fa-solid fa-eraser"></i>
-                </button>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-signal icon-cyan"></i>
+                <div class="stat-meta">
+                  <span class="stat-label">Sinyal GPS</span>
+                  <span class="stat-value" id="signalStrength">-- GPS</span>
+                </div>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-heart-pulse icon-red"></i>
+                <div class="stat-meta">
+                  <span class="stat-label">Detak Jantung</span>
+                  <span class="stat-value" id="heartRateValue">-- BPM</span>
+                </div>
               </div>
             </div>
 
-            <!-- Leaflet Map Mount Point -->
-            <div id="map" class="map-viewport"></div>
-
-            <!-- Floating Map Legend -->
-            <div class="map-floating-overlay">
-              <div class="legend-item">
-                <span class="legend-color legend-green"></span> <span>0-12 km/h (Santai)</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-color legend-blue"></span> <span>13-22 km/h (Latihan)</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-color legend-orange"></span> <span>23-28 km/h (Cepat)</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-color legend-red"></span> <span>> 28 km/h (Sprint)</span>
-              </div>
-            </div>
+            <!-- Quick Child Calling / Ping Buzzer -->
+            <button class="btn btn-call-child" id="btnPingChild" title="Kirim sinyal dering ke HP anak">
+              <i class="fa-solid fa-bell-concierge"></i>
+              <span>Panggil Anak (Bunyikan HP Anak)</span>
+            </button>
           </div>
 
-          <!-- Right: Circular Speedometer & Telemetry Gauge for Roller Skating -->
+          <!-- Speedometer & Live Chart Card -->
           <div class="glass-card gauge-panel-card">
             <div class="card-header">
-              <span class="card-title"><i class="fa-solid fa-gauge-high"></i> Speedometer Sepatu Roda</span>
+              <span class="card-title"><i class="fa-solid fa-gauge-high"></i> Speedometer Live</span>
               <div class="unit-switch">
                 <button class="unit-btn active" id="unitKmh">KM/H</button>
                 <button class="unit-btn" id="unitMph">MPH</button>
               </div>
             </div>
 
-            <!-- Circular SVG Speedometer (Scaled 0 - 45 km/h for inline skating) -->
+            <!-- Circular SVG Speedometer -->
             <div class="speedometer-container">
               <div class="speedometer-svg-wrapper">
                 <svg viewBox="0 0 240 240" class="speedometer-svg">
                   <!-- Background Track Arc -->
                   <circle cx="120" cy="120" r="95" class="gauge-bg-arc" />
-                  
-                  <!-- Warning Zone Track Arc (>28 km/h high sprint zone) -->
+                  <!-- Warning Zone Track Arc -->
                   <circle cx="120" cy="120" r="95" class="gauge-warning-arc" />
-                  
                   <!-- Dynamic Glowing Progress Arc -->
                   <circle cx="120" cy="120" r="95" class="gauge-fill-arc" id="gaugeFillArc" />
-                  
                   <!-- Center Dial Info -->
                   <g class="gauge-center-text">
                     <text x="120" y="115" class="gauge-digit mono-text" id="gaugeSpeedDigit">0.0</text>
@@ -2033,13 +1894,12 @@ body {
                     <text x="120" y="162" class="gauge-substatus" id="gaugeStatusText">STANDBY</text>
                   </g>
                 </svg>
-                
                 <!-- Speedometer Needle Pointer -->
                 <div class="gauge-needle" id="gaugeNeedle"></div>
                 <div class="gauge-needle-cap"></div>
               </div>
 
-              <!-- Speedometer Scale Numbers: 0, 10, 20, 30, 40, 45 -->
+              <!-- Speedometer Scale Numbers -->
               <div class="speedometer-scale">
                 <span>0</span>
                 <span>10</span>
@@ -2050,7 +1910,7 @@ body {
               </div>
             </div>
 
-            <!-- Mini Live Speed Chart (0 - 35 km/h) -->
+            <!-- Mini Live Speed Chart -->
             <div class="speed-chart-wrapper">
               <div class="chart-header">
                 <span><i class="fa-solid fa-chart-line"></i> Irama Kecepatan Riil</span>
@@ -2062,47 +1922,144 @@ body {
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Bottom Row: Training Session Log Table & Data Export -->
+      <!-- Section 3: Lower Data & Safety Controls Grid -->
+      <section class="lower-data-grid">
+        <!-- Left: Training Session Log Table -->
         <div class="glass-card telemetry-log-card">
           <div class="table-header-row">
             <div class="table-title">
               <i class="fa-solid fa-clipboard-list"></i>
-              <span>Log Data Riil GPS Anak</span>
+              <span>Log Riil Latihan Sepatu Roda</span>
               <span class="table-count mono-text" id="logCountBadge">(0 catatan)</span>
             </div>
             <div class="table-actions">
-              <button class="btn btn-outline" id="btnExportCSV">
-                <i class="fa-solid fa-file-csv"></i> Unduh Laporan (CSV)
+              <button class="btn-outline" id="btnExportCSV" title="Unduh data format CSV">
+                <i class="fa-solid fa-file-csv"></i> CSV
               </button>
-              <button class="btn btn-outline" id="btnExportJSON">
-                <i class="fa-solid fa-file-code"></i> Ekspor JSON
+              <button class="btn-outline" id="btnExportJSON" title="Unduh data format JSON">
+                <i class="fa-solid fa-file-code"></i> JSON
               </button>
-              <button class="btn btn-outline danger" id="btnClearLogs">
+              <button class="btn-outline danger" id="btnClearLogs" title="Bersihkan riwayat tabel">
                 <i class="fa-solid fa-trash-can"></i> Bersihkan
               </button>
             </div>
           </div>
 
           <div class="table-responsive">
-            <table class="telemetry-table" id="telemetryTable">
+            <table class="telemetry-table">
               <thead>
                 <tr>
                   <th>Waktu</th>
-                  <th>Nama Atlet</th>
+                  <th>Atlet</th>
                   <th>Kecepatan</th>
-                  <th>Jarak Tempuh</th>
-                  <th>Putaran Ke-</th>
-                  <th>Koordinat Lintasan</th>
-                  <th>Arah Luncur</th>
-                  <th>Detak Jantung</th>
-                  <th>Status Gerak</th>
+                  <th>Jarak</th>
+                  <th>Putaran</th>
+                  <th>Koordinat</th>
+                  <th>Arah</th>
+                  <th>Jantung</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody id="telemetryTableBody">
-                <!-- Data riil akan otomatis muncul saat HP anak mengirim sinyal -->
+                <tr>
+                  <td colspan="9" style="text-align: center; color: var(--text-dim); padding: 24px;">
+                    <i class="fa-solid fa-satellite-dish" style="margin-right: 8px;"></i>
+                    Data riil akan otomatis tercatat saat HP anak mengirim sinyal GPS...
+                  </td>
+                </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Right: Safety Zone & Controls -->
+        <div class="safety-controls-col">
+          <!-- Safety Zone (Geofence) Card -->
+          <div class="glass-card geofence-card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-shield-halved"></i> Zona Aman Latihan</span>
+              <span class="badge badge-success" id="geofenceStatusBadge">AKTIF</span>
+            </div>
+            <div class="geofence-body">
+              <div class="geofence-indicator">
+                <i class="fa-solid fa-circle-check text-success"></i>
+                <span id="geofenceText">Zona aman radius <span id="geofenceRadiusText">200m</span> dari titik awal meluncur.</span>
+              </div>
+              <div class="geofence-meta">
+                <span>Jarak ke Titik Awal: <strong class="mono-text" id="distanceToParent">0 meter</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real Coordinates & Location Card -->
+          <div class="glass-card location-card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-location-dot"></i> Titik Koordinat GPS Nyata</span>
+              <button class="btn-icon" id="btnCopyCoords" title="Salin Koordinat"><i class="fa-regular fa-copy"></i></button>
+            </div>
+            <div class="coords-display">
+              <div class="coord-item">
+                <span class="coord-label">Latitude</span>
+                <span class="coord-value mono-text" id="valLatitude">--.------</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label">Longitude</span>
+                <span class="coord-value mono-text" id="valLongitude">---.------</span>
+              </div>
+            </div>
+            <div class="address-box">
+              <i class="fa-solid fa-map-pin"></i>
+              <span id="currentAddress">Menunggu HP anak terhubung & mengirim sinyal GPS...</span>
+            </div>
+            <div class="altitude-heading-row">
+              <div class="micro-stat">
+                <span class="micro-label">Arah Luncur</span>
+                <span class="micro-value mono-text" id="valHeading">--°</span>
+              </div>
+              <div class="micro-stat">
+                <span class="micro-label">Akurasi GPS</span>
+                <span class="micro-value mono-text" id="valAccuracy">&plusmn; -- m</span>
+              </div>
+              <div class="micro-stat">
+                <span class="micro-label">Elevasi</span>
+                <span class="micro-value mono-text" id="valAltitude">-- m</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Session Controls Card -->
+          <div class="glass-card controls-card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-sliders"></i> Kontrol Sesi Latihan</span>
+              <span class="badge badge-neutral" id="simStatusBadge">REAL LIVE</span>
+            </div>
+            <div class="playback-btn-group">
+              <button id="btnCenterMap" class="btn btn-primary" title="Pusatkan Kamera ke Posisi Anak">
+                <i class="fa-solid fa-crosshairs"></i> Pusatkan
+              </button>
+              <button id="btnRestartSession" class="btn btn-secondary" title="Mulai Ulang Hitungan Latihan">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Reset Sesi
+              </button>
+            </div>
+          </div>
+
+          <!-- Safety & Incident Stream -->
+          <div class="glass-card alerts-card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-bell"></i> Pemberitahuan Keamanan</span>
+              <span id="alertCountBadge" class="badge badge-neutral">Normal</span>
+            </div>
+            <div class="alert-stream" id="alertStream">
+              <div class="alert-item alert-info">
+                <i class="fa-solid fa-circle-info"></i>
+                <div class="alert-content">
+                  <span class="alert-title">Sistem Siap Digunakan</span>
+                  <span class="alert-time">Klik "+ Hubungkan HP Anak" untuk mulai melacak secara live</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -2110,58 +2067,66 @@ body {
 
     <!-- Modal Pairing HP Anak -->
     <div class="modal-overlay" id="pairingModalOverlay">
-      <div class="modal-card">
+      <div class="pairing-modal-card">
         <div class="modal-header">
           <div class="modal-title-group">
-            <i class="fa-solid fa-qrcode icon-cyan"></i>
-            <div>
-              <h3>Hubungkan HP Anak (Mode Pelacak)</h3>
-              <p class="modal-subtitle">Scan QR Code atau bagikan link ini ke HP anak Anda</p>
-            </div>
+            <h2><i class="fa-solid fa-qrcode icon-cyan"></i> Hubungkan HP Anak</h2>
+            <p>Scan QR code ini atau bagikan link ke HP anak yang dibawa saat berlatih sepatu roda.</p>
           </div>
-          <button class="btn-close-modal" id="btnClosePairingModal">&times;</button>
+          <button class="btn-close-modal" id="btnClosePairingModal" title="Tutup Modal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
 
-        <div class="modal-body">
-          <div class="pairing-content">
-            <!-- Left: QR Code Display -->
-            <div class="qr-container">
-              <div class="qr-box">
-                <img id="qrCodeImage" src="" alt="QR Code Link HP Anak">
-              </div>
-              <span class="room-code-tag" id="displayRoomCode">KODE: SKATE-8821</span>
-              <div class="conn-sync-status waiting" id="modalConnStatus">
-                <span class="pulse-dot"></span>
-                <span id="modalConnStatusText">Menunggu HP anak membuka link...</span>
+        <div class="pairing-content">
+          <!-- Left: QR Code Display -->
+          <div class="qr-container">
+            <div class="qr-box">
+              <img id="qrCodeImage" src="" alt="QR Code Link HP Anak">
+            </div>
+            <div class="room-code-badge" id="displayRoomCode">KODE: SKATE-8821</div>
+            <div class="conn-sync-status" id="modalConnStatus">
+              <i class="fa-solid fa-satellite-dish"></i>
+              <span id="modalConnStatusText">Menunggu HP Anak Terhubung...</span>
+            </div>
+          </div>
+
+          <!-- Right: Direct Link & Setup Form -->
+          <div class="pairing-details">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-desc">
+                <h4>Buka di Browser HP Anak</h4>
+                <p>Kirim link ini melalui WhatsApp atau salin ke browser Chrome/Safari HP anak:</p>
+                <div class="input-copy-group">
+                  <input type="text" id="txtTrackerUrl" readonly value="">
+                  <button class="btn-copy" id="btnCopyTrackerUrl"><i class="fa-regular fa-copy"></i> Salin</button>
+                </div>
+                <div style="margin-top: 8px;">
+                  <a href="#" id="btnShareWhatsApp" target="_blank" class="btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i> Bagikan ke WhatsApp Anak
+                  </a>
+                </div>
               </div>
             </div>
 
-            <!-- Right: Direct Link & Setup Form -->
-            <div class="pairing-details">
-              <label class="form-label">Link Langsung untuk HP Anak:</label>
-              <div class="copy-link-group">
-                <input type="text" id="txtTrackerUrl" readonly class="custom-input mono-text" value="Memuat link...">
-                <button class="btn btn-primary" id="btnCopyTrackerUrl" title="Salin Link">
-                  <i class="fa-regular fa-copy"></i> Salin
-                </button>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-desc">
+                <h4>Mulai Latihan</h4>
+                <p>Di layar HP anak, tekan tombol <strong>"MULAI MELUNCUR"</strong> lalu izinkan akses sensor GPS.</p>
               </div>
+            </div>
 
-              <div class="share-whatsapp-box">
-                <a id="btnShareWhatsApp" href="#" target="_blank" class="btn btn-whatsapp">
-                  <i class="fa-brands fa-whatsapp"></i> Kirim Link via WhatsApp
-                </a>
-              </div>
-
-              <hr class="modal-divider">
-
-              <!-- Form Daftarkan Anak Baru -->
-              <h4 style="font-size: 0.85rem; margin-bottom: 8px; color: var(--text-pure);">
-                <i class="fa-solid fa-user-pen"></i> Sesuaikan Profil Anak:
+            <!-- Form Daftarkan Anak Baru -->
+            <div class="register-child-form">
+              <h4 style="font-size: 0.85rem; color: var(--text-pure); display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-user-plus icon-cyan"></i> Ganti Profil Anak / Buat Ruangan Baru:
               </h4>
               <div class="form-row">
                 <div class="form-col">
                   <label>Nama Anak:</label>
-                  <input type="text" id="inputChildName" class="custom-input" value="Kevin Pratama">
+                  <input type="text" id="inputChildName" class="custom-input" placeholder="Nama Atlet Cilik" value="Anak Saya">
                 </div>
                 <div class="form-col">
                   <label>Usia (Tahun):</label>
@@ -2171,7 +2136,7 @@ body {
               <div class="form-row">
                 <div class="form-col">
                   <label>Berat Badan (kg):</label>
-                  <input type="number" id="inputChildWeight" class="custom-input" value="32" min="15" max="80">
+                  <input type="number" id="inputChildWeight" class="custom-input" value="32" min="15" max="100">
                 </div>
                 <div class="form-col">
                   <label>Batas Kecepatan Aman:</label>
@@ -2208,7 +2173,7 @@ body {
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Application Modules (telemetry-engine & map-manager loaded as classic scripts) -->
+  <!-- Application Modules -->
   <!-- Telemetry Engine -->
   <script>
 /**
@@ -2533,8 +2498,13 @@ class MapManager {
     this.map = L.map(this.containerId, {
       center: [defaultLat, defaultLng],
       zoom: 14,
-      zoomControl: false
+      zoomControl: false,
+      scrollWheelZoom: false
     });
+
+    // Only allow wheel zoom if map is explicitly focused/clicked, disable on mouseout
+    this.map.on('click', () => this.map.scrollWheelZoom.enable());
+    this.map.on('mouseout', () => this.map.scrollWheelZoom.disable());
 
     L.control.zoom({ position: 'bottomright' }).addTo(this.map);
 
