@@ -40,7 +40,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-image: 
+      background-image:
         radial-gradient(circle at 50% 10%, rgba(0, 242, 254, 0.12) 0%, transparent 50%),
         linear-gradient(180deg, #070a13 0%, #0d1629 100%);
       padding: 16px;
@@ -91,6 +91,19 @@
       padding: 4px 10px;
       border-radius: 20px;
       border: 1px solid rgba(16, 185, 129, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .parent-conn-status.disconnected {
+      color: var(--text-muted);
+      background: rgba(148, 163, 184, 0.08);
+      border-color: rgba(148, 163, 184, 0.2);
+    }
+
+    .parent-conn-status.disconnected .pulse-dot {
+      background: var(--text-muted);
+      box-shadow: none;
+      animation: none;
     }
 
     .pulse-dot {
@@ -105,6 +118,23 @@
     @keyframes pulse {
       0%, 100% { transform: scale(0.9); opacity: 0.7; }
       50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    /* Firebase Init Banner */
+    .firebase-banner {
+      display: none;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      color: #fca5a5;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .firebase-banner.show {
+      display: block;
     }
 
     /* Child Hero Card */
@@ -195,10 +225,7 @@
       gap: 12px;
     }
 
-    .stat-card i {
-      font-size: 1.4rem;
-    }
-
+    .stat-card i { font-size: 1.4rem; }
     .stat-card.distance i { color: var(--cyan); }
     .stat-card.accuracy i { color: var(--green); }
     .stat-card.time i { color: var(--amber); }
@@ -259,6 +286,11 @@
       box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35);
     }
 
+    .btn-toggle-tracking:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .wake-lock-info {
       font-size: 0.72rem;
       color: var(--text-muted);
@@ -311,7 +343,20 @@
       padding: 12px 24px;
       border-radius: 12px;
       font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
+    }
+
+    /* Firebase status info (small bottom) */
+    .firebase-status-bar {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
   </style>
 </head>
@@ -321,21 +366,28 @@
     <header class="top-bar">
       <div class="room-badge">
         <i class="fa-solid fa-satellite"></i>
-        <span id="txtRoomCode">SKATE-8821</span>
+        <span id="txtRoomCode">SKATE-????</span>
       </div>
-      <div class="parent-conn-status" id="connBadge">
+      <div class="parent-conn-status disconnected" id="connBadge">
         <span class="pulse-dot"></span>
-        <span id="connText">TERHUBUNG KE ORANG TUA</span>
+        <span id="connText">MEMUAT...</span>
       </div>
     </header>
+
+    <!-- Firebase Config Warning (tampil jika belum dikonfigurasi) -->
+    <div class="firebase-banner" id="firebaseBanner">
+      ⚠️ <strong>Perlu Konfigurasi Firebase!</strong><br>
+      Buka file <code>firebase-config.js</code> dan isi dengan data dari Firebase Console Anda.
+      <a href="https://console.firebase.google.com" target="_blank" style="color:#93c5fd;">Buka Firebase Console →</a>
+    </div>
 
     <!-- Child Profile Card -->
     <main class="hero-card">
       <div class="skater-avatar">
         <i class="fa-solid fa-person-skating"></i>
       </div>
-      <h1 class="child-name" id="childDisplayName">Kevin Pratama</h1>
-      <p class="child-category" id="childCategoryName">Inline Speed Skate • Usia 9 Thn</p>
+      <h1 class="child-name" id="childDisplayName">Memuat Profil...</h1>
+      <p class="child-category" id="childCategoryName">Inline Speed Skate</p>
 
       <!-- Big Speed Readout -->
       <div class="speed-box">
@@ -350,7 +402,7 @@
           <i class="fa-solid fa-road"></i>
           <div class="stat-info">
             <span class="stat-label-mini">Jarak Latihan</span>
-            <span class="stat-value-mini" id="liveDistanceText">0 meter</span>
+            <span class="stat-value-mini" id="liveDistanceText">0 m</span>
           </div>
         </div>
 
@@ -358,7 +410,7 @@
           <i class="fa-solid fa-location-crosshairs"></i>
           <div class="stat-info">
             <span class="stat-label-mini">Akurasi GPS</span>
-            <span class="stat-value-mini" id="liveAccuracyText">&plusmn; 2.1 m</span>
+            <span class="stat-value-mini" id="liveAccuracyText">Menunggu...</span>
           </div>
         </div>
 
@@ -374,7 +426,7 @@
           <i class="fa-solid fa-battery-three-quarters"></i>
           <div class="stat-info">
             <span class="stat-label-mini">Baterai HP</span>
-            <span class="stat-value-mini" id="liveBatteryText">94%</span>
+            <span class="stat-value-mini" id="liveBatteryText">--%</span>
           </div>
         </div>
       </div>
@@ -382,14 +434,19 @@
 
     <!-- Bottom Action & Controls -->
     <footer class="action-button-area">
-      <button class="btn-toggle-tracking start" id="btnToggleTracking">
+      <button class="btn-toggle-tracking start" id="btnToggleTracking" disabled>
         <i class="fa-solid fa-play"></i>
-        <span id="btnActionText">MULAI MELUNCUR ⛸️</span>
+        <span id="btnActionText">Memuat Firebase...</span>
       </button>
 
       <div class="wake-lock-info">
         <i class="fa-solid fa-mobile-screen"></i>
         <span>Layar dijaga tetap aktif agar GPS tetap merekam di saku/armband</span>
+      </div>
+
+      <div class="firebase-status-bar">
+        <i class="fa-brands fa-google"></i>
+        <span id="firebaseStatusText">Menghubungkan ke Firebase...</span>
       </div>
     </footer>
   </div>
@@ -406,13 +463,28 @@
     </div>
   </div>
 
-  <script>
-    // Extract Room Code from URL: ?room=SKATE-XXXX
-    const urlParams = new URLSearchParams(window.location.search);
-    const roomCode = urlParams.get('room') || 'SKATE-8821';
-    document.getElementById('txtRoomCode').textContent = roomCode;
+  <!-- Load firebase-config.js first -->
+  <script type="module">
+    // ===== FIREBASE CONFIG =====
+    // Ganti nilai-nilai ini dengan config dari Firebase Console Anda!
+    const FIREBASE_CONFIG = {
+      apiKey:            "AIzaSyBMWI-kGim5JrKdfTzfu6JbVBOgmN3-vtA",
+      authDomain:        "skate-b99ac.firebaseapp.com",
+      databaseURL:       "https://skate-b99ac-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId:         "skate-b99ac",
+      storageBucket:     "skate-b99ac.firebasestorage.app",
+      messagingSenderId: "795296616628",
+      appId:             "1:795296616628:web:415a8afe03189c7d0647e1",
+      measurementId:     "G-KWDDTVYN7W"
+    };
 
-    // State
+    // ===== FIREBASE IMPORTS =====
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, set, onValue, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    // ===== STATE =====
+    let db = null;
+    let isFirebaseReady = false;
     let isTracking = false;
     let watchId = null;
     let wakeLock = null;
@@ -422,35 +494,49 @@
     let lastFixTime = null;
     let startTime = null;
     let timerInterval = null;
-    let batteryLevel = 95;
+    let batteryLevel = null;
     let audioContext = null;
 
-    // DOM Elements
-    const btnToggle = document.getElementById('btnToggleTracking');
-    const btnActionText = document.getElementById('btnActionText');
-    const liveSpeed = document.getElementById('liveSpeedText');
-    const liveDistance = document.getElementById('liveDistanceText');
-    const liveAccuracy = document.getElementById('liveAccuracyText');
-    const liveDuration = document.getElementById('liveDurationText');
-    const liveBattery = document.getElementById('liveBatteryText');
-    const childName = document.getElementById('childDisplayName');
-    const childCategory = document.getElementById('childCategoryName');
-    const connText = document.getElementById('connText');
-    const parentAlertModal = document.getElementById('parentAlertModal');
-    const btnAckPing = document.getElementById('btnAckPing');
+    // Extract Room Code from URL: ?room=SKATE-XXXX
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomCode = urlParams.get('room') || generateRoomCode();
 
-    // Haversine Distance
-    function calculateDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371000; // meters
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-                Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
+    function generateRoomCode() {
+      return 'SKATE-' + Math.floor(1000 + Math.random() * 9000);
     }
 
-    // Battery Status API
+    // ===== DOM =====
+    const btnToggle       = document.getElementById('btnToggleTracking');
+    const btnActionText   = document.getElementById('btnActionText');
+    const liveSpeed       = document.getElementById('liveSpeedText');
+    const liveDistance    = document.getElementById('liveDistanceText');
+    const liveAccuracy    = document.getElementById('liveAccuracyText');
+    const liveDuration    = document.getElementById('liveDurationText');
+    const liveBattery     = document.getElementById('liveBatteryText');
+    const childName       = document.getElementById('childDisplayName');
+    const childCategory   = document.getElementById('childCategoryName');
+    const connText        = document.getElementById('connText');
+    const connBadge       = document.getElementById('connBadge');
+    const parentAlertModal = document.getElementById('parentAlertModal');
+    const btnAckPing      = document.getElementById('btnAckPing');
+    const firebaseBanner  = document.getElementById('firebaseBanner');
+    const fbStatusText    = document.getElementById('firebaseStatusText');
+    const roomCodeEl      = document.getElementById('txtRoomCode');
+
+    roomCodeEl.textContent = roomCode;
+
+    // ===== HAVERSINE =====
+    function calcDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371000;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)**2 +
+                Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+                Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    // ===== BATTERY API =====
     if ('getBattery' in navigator) {
       navigator.getBattery().then(battery => {
         batteryLevel = Math.round(battery.level * 100);
@@ -460,37 +546,30 @@
           liveBattery.textContent = `${batteryLevel}%`;
         });
       });
+    } else {
+      batteryLevel = 100;
+      liveBattery.textContent = 'N/A';
     }
 
-    // Screen Wake Lock API to prevent phone sleep in pocket/armband
+    // ===== WAKE LOCK =====
     async function requestWakeLock() {
       try {
         if ('wakeLock' in navigator) {
           wakeLock = await navigator.wakeLock.request('screen');
-          console.log('Screen WakeLock active');
         }
       } catch (err) {
-        console.warn('WakeLock error:', err);
+        console.warn('WakeLock:', err);
       }
     }
-
     function releaseWakeLock() {
-      if (wakeLock) {
-        wakeLock.release().then(() => { wakeLock = null; });
-      }
+      if (wakeLock) wakeLock.release().then(() => { wakeLock = null; });
     }
 
-    // Sound Beep / Chime when parent calls child
+    // ===== CHIME (dipanggil orang tua) =====
     function playParentCallChime() {
       try {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
-
-        // 3 loud cheerful rings
+        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
         [0, 0.3, 0.6].forEach(delay => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
@@ -503,98 +582,73 @@
           osc.start(audioContext.currentTime + delay);
           osc.stop(audioContext.currentTime + delay + 0.26);
         });
-
-        if ('vibrate' in navigator) {
-          navigator.vibrate([300, 100, 300, 100, 300]);
-        }
-      } catch (e) {
-        console.warn('Audio call error:', e);
-      }
+        if ('vibrate' in navigator) navigator.vibrate([300, 100, 300, 100, 300]);
+      } catch(e) { console.warn('Chime error:', e); }
     }
 
-    // Fetch Room Data on load
-    fetch(`/api/telemetry/${roomCode}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.childName) {
-          childName.textContent = data.childName;
-          childCategory.textContent = `${data.category || 'Inline Skate'} • ${data.weightKg || 30} kg`;
-        }
-      })
-      .catch(err => console.log('Fetch room info:', err));
-
-    // Send GPS Telemetry to Parent Dashboard
+    // ===== SEND GPS TO FIREBASE =====
     async function sendTelemetry(coords) {
       const now = Date.now();
       let calculatedSpeed = 0;
 
-      if (coords.speed !== null && coords.speed !== undefined && !isNaN(coords.speed)) {
+      if (coords.speed !== null && coords.speed !== undefined && !isNaN(coords.speed) && coords.speed >= 0) {
         calculatedSpeed = Math.round(coords.speed * 3.6 * 10) / 10;
       } else if (lastLat !== null && lastFixTime) {
         const deltaSeconds = (now - lastFixTime) / 1000;
-        const deltaMeters = calculateDistance(lastLat, lastLng, coords.latitude, coords.longitude);
+        const deltaMeters = calcDistance(lastLat, lastLng, coords.latitude, coords.longitude);
         if (deltaSeconds > 0) {
           calculatedSpeed = Math.round((deltaMeters / deltaSeconds) * 3.6 * 10) / 10;
         }
       }
 
       if (lastLat !== null) {
-        const dM = calculateDistance(lastLat, lastLng, coords.latitude, coords.longitude);
-        if (dM > 0.5) { // filter micro GPS drift
-          totalDistanceMeters += Math.round(dM);
-        }
+        const dM = calcDistance(lastLat, lastLng, coords.latitude, coords.longitude);
+        if (dM >= 0.8) totalDistanceMeters += Math.round(dM);
       }
 
       lastLat = coords.latitude;
       lastLng = coords.longitude;
       lastFixTime = now;
 
-      // Update UI
-      liveSpeed.textContent = calculatedSpeed.toFixed(1);
+      // Update local UI
+      liveSpeed.textContent    = calculatedSpeed.toFixed(1);
       liveDistance.textContent = `${totalDistanceMeters.toLocaleString('id-ID')} m`;
       liveAccuracy.textContent = `± ${Math.round(coords.accuracy * 10) / 10} m`;
 
+      // Send to Firebase
+      if (!isFirebaseReady) return;
       try {
-        const payload = {
-          roomCode: roomCode,
+        const telemetryRef = ref(db, `rooms/${roomCode}/telemetry`);
+        await set(telemetryRef, {
           lat: coords.latitude,
           lng: coords.longitude,
           speed: calculatedSpeed,
           heading: coords.heading || 0,
           altitude: coords.altitude || 0,
-          accuracy: coords.accuracy,
-          battery: batteryLevel,
+          accuracy: Math.round(coords.accuracy * 10) / 10,
+          battery: batteryLevel || 100,
+          distanceMeters: totalDistanceMeters,
           isSkating: isTracking,
-          timestamp: new Date().toLocaleTimeString('id-ID')
-        };
-
-        const res = await fetch('/api/telemetry', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          timestamp: new Date().toLocaleTimeString('id-ID'),
+          _ts: now
         });
 
-        const result = await res.json();
-        if (result.shouldPing) {
-          parentAlertModal.style.display = 'flex';
-          playParentCallChime();
-        }
-
-        connText.textContent = 'TERHUBUNG KE HP ORANG TUA';
+        connBadge.className = 'parent-conn-status';
+        connText.textContent = 'STREAMING KE HP ORANG TUA';
       } catch (err) {
+        connBadge.className = 'parent-conn-status disconnected';
         connText.textContent = 'MENYAMBUNGKAN ULANG...';
+        console.warn('Firebase write error:', err);
       }
     }
 
-    // Start / Stop Tracking Toggle
+    // ===== START / STOP TRACKING =====
     btnToggle.addEventListener('click', () => {
       if (!isTracking) {
-        // START TRACKING
         if (!navigator.geolocation) {
           alert('Sensor GPS tidak didukung pada browser ini.');
           return;
         }
-
         isTracking = true;
         startTime = Date.now();
         requestWakeLock();
@@ -613,33 +667,103 @@
         watchId = navigator.geolocation.watchPosition(
           (pos) => sendTelemetry(pos.coords),
           (err) => {
-            console.warn('GPS Watch error:', err.message);
+            console.warn('GPS error:', err.message);
             liveAccuracy.textContent = 'GPS Lemah';
           },
-          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
       } else {
-        // STOP / PAUSE TRACKING
         isTracking = false;
         releaseWakeLock();
-        if (watchId) {
-          navigator.geolocation.clearWatch(watchId);
-          watchId = null;
-        }
-        if (timerInterval) {
-          clearInterval(timerInterval);
-        }
+        if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+        if (timerInterval) clearInterval(timerInterval);
 
         btnToggle.className = 'btn-toggle-tracking start';
-        btnActionText.textContent = 'LANJUTKAN MELUNCUR ⛸️';
+        btnActionText.textContent = 'MULAI MELUNCUR ⛸️';
         liveSpeed.textContent = '0.0';
+
+        // Update Firebase status to stopped
+        if (isFirebaseReady) {
+          try {
+            set(ref(db, `rooms/${roomCode}/telemetry/isSkating`), false);
+          } catch(e) {}
+        }
       }
     });
 
-    // Dismiss parent ping alert
-    btnAckPing.addEventListener('click', () => {
+    // ===== ACK PING =====
+    btnAckPing.addEventListener('click', async () => {
       parentAlertModal.style.display = 'none';
+      if (isFirebaseReady) {
+        try {
+          await set(ref(db, `rooms/${roomCode}/ping`), { active: false });
+        } catch(e) {}
+      }
     });
+
+    // ===== INIT FIREBASE =====
+    async function initFirebase() {
+      try {
+        // Check if config is still default (not configured)
+        if (FIREBASE_CONFIG.apiKey === 'GANTI_DENGAN_API_KEY_ANDA') {
+          firebaseBanner.classList.add('show');
+          fbStatusText.textContent = '⚠️ Firebase belum dikonfigurasi';
+          btnToggle.disabled = false;
+          btnToggle.className = 'btn-toggle-tracking start';
+          btnActionText.textContent = 'MULAI MELUNCUR ⛸️ (Offline)';
+          connBadge.className = 'parent-conn-status disconnected';
+          connText.textContent = 'FIREBASE BELUM SETUP';
+          childName.textContent = 'Anak Saya';
+          return;
+        }
+
+        const app = initializeApp(FIREBASE_CONFIG);
+        db = getDatabase(app);
+        isFirebaseReady = true;
+
+        fbStatusText.textContent = '✓ Firebase Terhubung';
+        btnToggle.disabled = false;
+        btnToggle.className = 'btn-toggle-tracking start';
+        btnActionText.textContent = 'MULAI MELUNCUR ⛸️';
+        connBadge.className = 'parent-conn-status disconnected';
+        connText.textContent = 'SIAP STREAMING';
+
+        // Load child profile from Firebase
+        try {
+          const profileSnap = await get(ref(db, `rooms/${roomCode}/profile`));
+          if (profileSnap.exists()) {
+            const p = profileSnap.val();
+            childName.textContent = p.childName || 'Anak Saya';
+            childCategory.textContent = `${p.category || 'Inline Skate'} • Usia ${p.age || '?'} Thn`;
+          } else {
+            childName.textContent = 'Anak Saya';
+          }
+        } catch(e) {
+          childName.textContent = 'Anak Saya';
+        }
+
+        // Listen for parent ping
+        onValue(ref(db, `rooms/${roomCode}/ping`), (snap) => {
+          const data = snap.val();
+          if (data && data.active === true) {
+            parentAlertModal.style.display = 'flex';
+            playParentCallChime();
+          }
+        });
+
+      } catch (err) {
+        console.error('[Firebase] Init error:', err);
+        fbStatusText.textContent = '❌ Gagal terhubung ke Firebase';
+        connBadge.className = 'parent-conn-status disconnected';
+        connText.textContent = 'FIREBASE ERROR';
+        btnToggle.disabled = false;
+        btnActionText.textContent = 'MULAI MELUNCUR ⛸️ (Offline)';
+        childName.textContent = 'Anak Saya';
+      }
+    }
+
+    // Start Firebase
+    initFirebase();
   </script>
 </body>
 </html>
