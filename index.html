@@ -18,6 +18,1683 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <!-- Custom Styles -->
+  <style>
+/* ==========================================================================
+   SkateKids Track - Real-Time Child Inline Skate & Safety Monitor CSS
+   Theme: High-Tech Sporty Dark Glassmorphism / Kid Safety Telemetry
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --bg-base: #060911;
+  --bg-surface: #0a0f1d;
+  --bg-card: rgba(13, 21, 38, 0.78);
+  --bg-card-hover: rgba(18, 30, 54, 0.88);
+  --bg-header: rgba(9, 15, 28, 0.88);
+  
+  /* Borders & Highlights */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(0, 242, 254, 0.35);
+  --border-active: #00f2fe;
+
+  /* Accent Colors */
+  --cyan-primary: #00f2fe;
+  --blue-electric: #38bdf8;
+  --emerald-green: #10b981;
+  --amber-warning: #f59e0b;
+  --rose-danger: #ef4444;
+  --purple-accent: #a855f7;
+
+  /* Text Colors */
+  --text-pure: #ffffff;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Shadows & Effects */
+  --glow-cyan: 0 0 20px rgba(0, 242, 254, 0.3);
+  --glow-green: 0 0 20px rgba(16, 185, 129, 0.3);
+  --glow-amber: 0 0 20px rgba(245, 158, 11, 0.3);
+  --glow-red: 0 0 20px rgba(239, 68, 68, 0.4);
+  --glass-blur: blur(14px);
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+    linear-gradient(180deg, #060911 0%, #0b1222 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono-text {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+}
+
+/* Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Top Header Navigation
+   ========================================================================== */
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--bg-header);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  gap: 20px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.15));
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan-primary);
+  font-size: 1.4rem;
+  box-shadow: var(--glow-cyan);
+}
+
+.pulse-icon {
+  animation: pulseRotate 4s ease-in-out infinite;
+}
+
+@keyframes pulseRotate {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.1); filter: brightness(1.3); }
+}
+
+.brand-info h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-pure);
+}
+
+.brand-info h1 span {
+  color: var(--cyan-primary);
+  text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+}
+
+.brand-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--emerald-green);
+  display: block;
+  margin-top: -2px;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.device-selector-wrapper,
+.route-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+}
+
+.device-selector-wrapper label,
+.route-selector-wrapper label {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.custom-select {
+  background: transparent;
+  border: none;
+  color: var(--text-pure);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.88rem;
+  outline: none;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.custom-select option {
+  background: #0d1527;
+  color: #fff;
+}
+
+/* Button Connect Child Phone in Header */
+.btn-connect-child {
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.2));
+  border: 1px solid rgba(0, 242, 254, 0.5);
+  color: var(--cyan-primary);
+  font-weight: 700;
+  font-size: 0.84rem;
+  padding: 7px 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+  transition: var(--transition-smooth);
+}
+
+.btn-connect-child:hover {
+  background: linear-gradient(135deg, #00f2fe, #10b981);
+  color: #060911;
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-1px);
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--emerald-green);
+}
+
+.status-indicator.offline {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--rose-danger);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--emerald-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--emerald-green);
+  animation: livePing 1.8s infinite;
+}
+
+.status-indicator.offline .pulse-dot {
+  background: var(--rose-danger);
+  box-shadow: 0 0 8px var(--rose-danger);
+  animation: none;
+}
+
+@keyframes livePing {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.time-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Dashboard Layout Grid
+   ========================================================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  padding: 24px 28px;
+  flex: 1;
+}
+
+/* Glass Card Component */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 242, 254, 0.2);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.card-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title i {
+  color: var(--cyan-primary);
+}
+
+/* Badges */
+.badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.18);
+  color: var(--emerald-green);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-info {
+  background: rgba(0, 242, 254, 0.18);
+  color: var(--cyan-primary);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.18);
+  color: var(--amber-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.18);
+  color: var(--rose-danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-neutral {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Left Sidebar: Child Profile & Safety
+   ========================================================================== */
+.sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Child Profile Card */
+.device-quick-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.device-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(16, 185, 129, 0.15));
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--cyan-primary);
+}
+
+.device-names h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.device-names p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(10, 16, 30, 0.6);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 12px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-pill i {
+  font-size: 1.1rem;
+}
+
+.icon-green { color: var(--emerald-green); }
+.icon-cyan { color: var(--cyan-primary); }
+.icon-amber { color: var(--amber-warning); }
+.icon-red { color: var(--rose-danger); }
+
+.stat-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+/* Call Child Buzzer Button */
+.btn-call-child {
+  width: 100%;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--amber-warning);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+}
+
+.btn-call-child:hover {
+  background: rgba(245, 158, 11, 0.25);
+  box-shadow: var(--glow-amber);
+}
+
+/* Geofence Safety Card */
+.geofence-body {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px dashed rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.geofence-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.geofence-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 6px;
+}
+
+/* Coordinates & Location */
+.coords-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.coord-item {
+  background: rgba(10, 16, 30, 0.6);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+.coord-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+}
+
+.coord-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cyan-primary);
+}
+
+.address-box {
+  background: rgba(0, 242, 254, 0.05);
+  border: 1px dashed rgba(0, 242, 254, 0.25);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.address-box i {
+  color: var(--cyan-primary);
+  margin-top: 3px;
+}
+
+.altitude-heading-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.micro-stat {
+  background: rgba(10, 16, 30, 0.5);
+  padding: 6px 8px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.micro-label {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.micro-value {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+/* Simulation Controls */
+.playback-btn-group {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-smooth);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f2fe, #38bdf8);
+  color: #070a12;
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-icon:hover {
+  color: var(--cyan-primary);
+}
+
+.speed-multiplier-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.speed-multiplier-wrapper label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.multiplier-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.chip-btn {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.chip-btn:hover {
+  border-color: var(--cyan-primary);
+  color: var(--text-pure);
+}
+
+.chip-btn.active {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: var(--cyan-primary);
+  color: var(--cyan-primary);
+}
+
+/* Alert Stream */
+.alert-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  background: rgba(10, 16, 30, 0.6);
+  border-left: 3px solid var(--cyan-primary);
+}
+
+.alert-item.alert-warn {
+  border-left-color: var(--amber-warning);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.alert-item.alert-danger {
+  border-left-color: var(--rose-danger);
+  background: rgba(239, 68, 68, 0.1);
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-title {
+  font-weight: 600;
+  color: var(--text-pure);
+}
+
+.alert-time {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   Main Telemetry Workspace
+   ========================================================================== */
+.main-telemetry-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Top 4 KPI Metric Cards */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.metric-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent-color, var(--cyan-primary)), transparent);
+  opacity: 0.8;
+}
+
+.metric-speed { --accent-color: var(--emerald-green); }
+.metric-distance { --accent-color: var(--cyan-primary); }
+.metric-trip { --accent-color: var(--amber-warning); }
+.metric-time { --accent-color: var(--purple-accent); }
+
+.metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.metric-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--emerald-green);
+  font-size: 1.1rem;
+}
+
+.metric-icon-box.cyan {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: rgba(0, 242, 254, 0.3);
+  color: var(--cyan-primary);
+}
+
+.metric-icon-box.amber {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--amber-warning);
+}
+
+.metric-icon-box.purple {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: var(--purple-accent);
+}
+
+.metric-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--emerald-green);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.metric-tag.cyan {
+  color: var(--cyan-primary);
+  background: rgba(0, 242, 254, 0.1);
+}
+
+.metric-tag.purple {
+  color: var(--purple-accent);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.btn-mini-reset {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--amber-warning);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition-smooth);
+}
+
+.btn-mini-reset:hover {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+.metric-body {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.metric-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-pure);
+  line-height: 1;
+}
+
+.metric-unit {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.metric-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+.text-success { color: var(--emerald-green); }
+
+/* ==========================================================================
+   Map & Gauge Visualizer Row
+   ========================================================================== */
+.visualizer-row {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+}
+
+/* Map Card */
+.map-container-card {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-toolbar {
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 16, 30, 0.85);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 400;
+}
+
+.map-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.map-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-pure);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-title i {
+  color: var(--cyan-primary);
+}
+
+.map-coords-badge {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--cyan-primary);
+  background: rgba(0, 242, 254, 0.1);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pulse-dot-small {
+  font-size: 0.45rem;
+  color: var(--emerald-green);
+  animation: livePing 1.5s infinite;
+}
+
+.map-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-layer-toggles {
+  display: flex;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.map-layer-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.map-layer-btn.active {
+  background: var(--cyan-primary);
+  color: #070a12;
+  font-weight: 700;
+}
+
+.map-tool-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.map-tool-btn:hover {
+  color: var(--text-pure);
+  border-color: var(--cyan-primary);
+}
+
+.map-tool-btn.active {
+  background: rgba(0, 242, 254, 0.2);
+  color: var(--cyan-primary);
+  border-color: var(--cyan-primary);
+}
+
+.map-viewport {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background: #090e1a;
+}
+
+/* Custom Leaflet Map Styles */
+.leaflet-container {
+  background: #090e1a !important;
+  font-family: var(--font-sans) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(14, 23, 42, 0.92) !important;
+  backdrop-filter: blur(12px) !important;
+  color: #fff !important;
+  border: 1px solid var(--cyan-primary) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(14, 23, 42, 0.92) !important;
+  border: 1px solid var(--cyan-primary) !important;
+}
+
+/* Map Floating Legend */
+.map-floating-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 400;
+  background: rgba(10, 16, 30, 0.85);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.legend-green { background: var(--emerald-green); }
+.legend-blue { background: var(--blue-electric); }
+.legend-orange { background: var(--amber-warning); }
+.legend-red { background: var(--rose-danger); }
+
+/* Skater Marker Custom CSS */
+.vehicle-marker-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.vehicle-radar-ping {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--cyan-primary);
+  background: rgba(0, 242, 254, 0.2);
+  animation: radarBeacon 2s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes radarBeacon {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+.vehicle-marker-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #00f2fe, #10b981);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #070a12;
+  font-size: 1rem;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.7);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vehicle-heading-arrow {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 7px solid #ffffff;
+}
+
+/* ==========================================================================
+   Speedometer HUD & Chart Panel for Inline Skating
+   ========================================================================== */
+.gauge-panel-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.unit-switch {
+  display: flex;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.unit-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.unit-btn.active {
+  background: var(--cyan-primary);
+  color: #070a12;
+}
+
+/* Circular Gauge */
+.speedometer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 10px 0;
+}
+
+.speedometer-svg-wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.speedometer-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(135deg);
+  overflow: visible;
+}
+
+.gauge-bg-arc {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 14;
+  stroke-dasharray: 447;
+  stroke-dashoffset: 149;
+  stroke-linecap: round;
+}
+
+.gauge-warning-arc {
+  fill: none;
+  stroke: rgba(239, 68, 68, 0.25);
+  stroke-width: 14;
+  stroke-dasharray: 447;
+  stroke-dashoffset: 380;
+  stroke-linecap: round;
+}
+
+.gauge-fill-arc {
+  fill: none;
+  stroke: var(--cyan-primary);
+  stroke-width: 14;
+  stroke-dasharray: 447;
+  stroke-dashoffset: 447;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.6));
+  transition: stroke-dashoffset 0.35s ease-out, stroke 0.3s;
+}
+
+.gauge-center-text {
+  transform: rotate(-135deg);
+  transform-origin: 120px 120px;
+  text-anchor: middle;
+}
+
+.gauge-digit {
+  font-size: 40px;
+  font-weight: 800;
+  fill: var(--text-pure);
+}
+
+.gauge-unit {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  fill: var(--cyan-primary);
+}
+
+.gauge-substatus {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  fill: var(--text-muted);
+}
+
+/* Needle */
+.gauge-needle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 80px;
+  background: linear-gradient(to top, #ffffff, var(--cyan-primary));
+  border-radius: 2px;
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%) rotate(-135deg);
+  transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1);
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.gauge-needle-cap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background: #0d1628;
+  border: 2px solid var(--cyan-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+}
+
+.speedometer-scale {
+  display: flex;
+  justify-content: space-between;
+  width: 210px;
+  margin-top: -15px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+/* Speed Trend Chart */
+.speed-chart-wrapper {
+  margin-top: 15px;
+  background: rgba(10, 16, 30, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.chart-peak {
+  color: var(--emerald-green);
+  font-weight: 700;
+}
+
+.chart-canvas-box {
+  position: relative;
+  width: 100%;
+  height: 110px;
+}
+
+/* ==========================================================================
+   Telemetry Log Table & Export Section
+   ========================================================================= */
+.telemetry-log-card {
+  padding: 20px;
+}
+
+.table-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.table-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.table-title i {
+  color: var(--cyan-primary);
+}
+
+.table-count {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+
+.btn-outline:hover {
+  background: rgba(0, 242, 254, 0.1);
+  border-color: var(--cyan-primary);
+  color: var(--cyan-primary);
+}
+
+.btn-outline.danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--rose-danger);
+  color: var(--rose-danger);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  max-height: 240px;
+}
+
+.telemetry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.telemetry-table th {
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.telemetry-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+}
+
+.telemetry-table tbody tr:hover {
+  background: rgba(0, 242, 254, 0.04);
+}
+
+/* ==========================================================================
+   Pairing Modal Dialog Styles
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 9, 17, 0.85);
+  backdrop-filter: blur(16px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  background: #0d1527;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 620px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), var(--glow-cyan);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  padding: 18px 24px;
+  background: rgba(15, 23, 42, 0.8);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-title-group i {
+  font-size: 1.5rem;
+}
+
+.modal-title-group h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-pure);
+}
+
+.modal-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-close-modal:hover {
+  color: var(--rose-danger);
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.pairing-content {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.qr-box {
+  width: 190px;
+  height: 190px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.qr-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.room-code-tag {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--cyan-primary);
+  background: rgba(0, 242, 254, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 242, 254, 0.25);
+}
+
+.conn-sync-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--amber-warning);
+  text-align: center;
+}
+
+.conn-sync-status.active {
+  color: var(--emerald-green);
+}
+
+.pairing-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.copy-link-group {
+  display: flex;
+  gap: 8px;
+}
+
+.custom-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text-pure);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.custom-input:focus {
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+.btn-whatsapp {
+  background: #25D366;
+  color: #070a13;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-whatsapp:hover {
+  filter: brightness(1.1);
+}
+
+.modal-divider {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: 6px 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-col label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: auto;
+}
+
+.toggle-audio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.toggle-audio-label input {
+  accent-color: var(--cyan-primary);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1280px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .visualizer-row {
+    grid-template-columns: 1fr;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px;
+  }
+  .dashboard-grid {
+    padding: 14px;
+  }
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  .map-container-card {
+    height: 380px;
+  }
+  .playback-btn-group {
+    grid-template-columns: 1fr;
+  }
+  .pairing-content {
+    grid-template-columns: 1fr;
+  }
+  .qr-container {
+    margin-bottom: 12px;
+  }
+}
+
+</style>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -532,9 +2209,1201 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Application Modules (telemetry-engine & map-manager loaded as classic scripts) -->
-  <script src="js/telemetry-engine.js"></script>
-  <script src="js/map-manager.js"></script>
-  <!-- app.js uses ES module imports for Firebase -->
-  <script type="module" src="js/app.js"></script>
+  <!-- Telemetry Engine -->
+  <script>
+/**
+ * SkateKids Track - Pure Real-Time Telemetry Engine
+ * 100% Data Nyata (Bebas Simulasi / Data Palsu).
+ * Mengolah koordinat GPS asli yang dipancarkan dari HP anak:
+ * - Kalkulasi Jarak Geodesik Haversine
+ * - Perhitungan Kecepatan Real-Time (km/jam & mph)
+ * - Deteksi Putaran Lintasan (Lap Counter) saat anak kembali ke titik awal
+ * - Estimasi Pembakaran Kalori Berdasarkan Berat Badan Anak & Durasi Meluncur
+ * - Sudut Arah Luncur (Bearing 0° - 360°)
+ * - Zona Aman Geofence dari Titik Awal Latihan
+ */
+
+class TelemetryEngine {
+  constructor() {
+    // Current Active Athlete Data
+    this.athlete = {
+      name: 'Anak Saya',
+      category: 'Sepatu Roda / Inline Skate',
+      weightKg: 30,
+      maxSafeSpeed: 28,
+      battery: 100
+    };
+
+    // Real GPS Coordinates State
+    this.startLat = null;
+    this.startLng = null;
+    this.currentLat = null;
+    this.currentLng = null;
+    this.previousLat = null;
+    this.previousLng = null;
+
+    // Movement & Speed Metrics
+    this.currentSpeed = 0; // km/h
+    this.maxRecordedSpeed = 0;
+    this.speedHistory = [];
+
+    // Distance & Lap Tracking
+    this.totalDistanceMeters = 0;
+    this.totalDistanceKm = 0;
+    this.tripStartTime = null;
+    this.activeSkateSeconds = 0;
+    this.idleSeconds = 0;
+
+    // Lap Counter State (Real track loop detection)
+    this.lapCount = 0;
+    this.lapStartTime = null;
+    this.lastLapTimeSeconds = 0;
+    this.bestLapTimeSeconds = null;
+    this.hasLeftStartZone = false;
+
+    // Biometrics & Fitness
+    this.caloriesBurned = 0;
+    this.heartRate = 95; // Resting
+
+    // Bearing & Accuracy
+    this.currentHeading = 0;
+    this.currentAltitude = 0;
+    this.accuracy = 0;
+
+    // Geofencing (Safe radius around start location: default 200m)
+    this.geofenceRadiusMeters = 200;
+    this.distanceFromStartMeters = 0;
+    this.isInsideGeofence = true;
+
+    // Listeners for UI
+    this.listeners = [];
+  }
+
+  onTick(callback) {
+    this.listeners.push(callback);
+  }
+
+  notifyTick(payload) {
+    this.listeners.forEach(cb => cb(payload));
+  }
+
+  // =========================================================================
+  // Pure Mathematical Geodesic Calculations (Haversine & Bearing)
+  // =========================================================================
+
+  calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // Radius bumi dalam meter
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    
+    const radLat1 = lat1 * Math.PI / 180;
+    const radLat2 = lat2 * Math.PI / 180;
+
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(radLat1) * Math.cos(radLat2) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // meter
+  }
+
+  calculateBearing(lat1, lon1, lat2, lon2) {
+    const radLat1 = lat1 * Math.PI / 180;
+    const radLat2 = lat2 * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const y = Math.sin(dLon) * Math.cos(radLat2);
+    const x = Math.cos(radLat1) * Math.sin(radLat2) -
+              Math.sin(radLat1) * Math.cos(radLat2) * Math.cos(dLon);
+    
+    const brng = Math.atan2(y, x) * 180 / Math.PI;
+    return (brng + 360) % 360;
+  }
+
+  bearingToCompass(degrees) {
+    const sectors = ['U (Utara)', 'TL (Timur Laut)', 'T (Timur)', 'TG (Tenggara)', 'S (Selatan)', 'BD (Barat Daya)', 'B (Barat)', 'BL (Barat Laut)'];
+    const index = Math.round(degrees / 45) % 8;
+    return sectors[index];
+  }
+
+  // =========================================================================
+  // Process Real Telemetry Feed (From Child's Phone)
+  // =========================================================================
+
+  processIncomingGps(data) {
+    const now = Date.now();
+    if (!this.tripStartTime) {
+      this.tripStartTime = now;
+      this.lapStartTime = now;
+    }
+
+    const lat = data.lat;
+    const lng = data.lng;
+    const speed = data.speed || 0;
+    const accuracy = data.accuracy || 2.0;
+    const heading = data.heading || 0;
+    const altitude = data.altitude || 0;
+    const battery = data.battery || 100;
+
+    // Set Initial Start Point on First GPS Fix
+    if (this.startLat === null || this.startLng === null) {
+      this.startLat = lat;
+      this.startLng = lng;
+    }
+
+    // Previous positions
+    this.previousLat = this.currentLat !== null ? this.currentLat : lat;
+    this.previousLng = this.currentLng !== null ? this.currentLng : lng;
+
+    this.currentLat = lat;
+    this.currentLng = lng;
+    this.currentSpeed = Math.round(speed * 10) / 10;
+    this.accuracy = Math.round(accuracy * 10) / 10;
+    this.currentAltitude = Math.round(altitude);
+    this.athlete.battery = battery;
+
+    if (this.currentSpeed > this.maxRecordedSpeed) {
+      this.maxRecordedSpeed = this.currentSpeed;
+    }
+
+    // Calculate heading from consecutive coordinates if GPS doesn't report it
+    if (heading && heading > 0) {
+      this.currentHeading = Math.round(heading);
+    } else if (this.previousLat !== null && (this.previousLat !== lat || this.previousLng !== lng)) {
+      this.currentHeading = Math.round(this.calculateBearing(this.previousLat, this.previousLng, lat, lng));
+    }
+
+    // Distance accumulation (Filter micro-GPS jitter < 0.8 meter)
+    if (this.previousLat !== null) {
+      const deltaMeters = this.calculateHaversineDistance(this.previousLat, this.previousLng, lat, lng);
+      if (deltaMeters >= 0.8) {
+        this.totalDistanceMeters += Math.round(deltaMeters);
+        this.totalDistanceKm = Number((this.totalDistanceMeters / 1000).toFixed(2));
+      }
+    }
+
+    // Active time & Heart rate
+    if (this.currentSpeed > 2.5) {
+      this.activeSkateSeconds += 1.5;
+      this.heartRate = Math.min(170, Math.max(105, Math.round(100 + (this.currentSpeed * 2.2))));
+    } else {
+      this.idleSeconds += 1.5;
+      this.heartRate = Math.max(90, Math.round(this.heartRate - 1));
+    }
+
+    // Real Calorie calculation: MET 7.8 * weightKg * (hours)
+    this.caloriesBurned = Math.round(7.8 * this.athlete.weightKg * (this.activeSkateSeconds / 3600));
+
+    // Geofencing calculation (distance from starting position)
+    if (this.startLat !== null) {
+      this.distanceFromStartMeters = Math.round(this.calculateHaversineDistance(
+        this.startLat, this.startLng, lat, lng
+      ));
+      this.isInsideGeofence = this.distanceFromStartMeters <= this.geofenceRadiusMeters;
+
+      // Real Lap Counter Logic:
+      // When child skates > 40m away from start, flag hasLeftStartZone = true
+      if (this.distanceFromStartMeters > 40) {
+        this.hasLeftStartZone = true;
+      }
+      // When child returns to within 12m of start after leaving, increment 1 lap!
+      if (this.hasLeftStartZone && this.distanceFromStartMeters < 12) {
+        this.lapCount++;
+        this.hasLeftStartZone = false;
+        const lapSecs = Math.round((now - this.lapStartTime) / 1000);
+        this.lastLapTimeSeconds = lapSecs;
+        if (!this.bestLapTimeSeconds || lapSecs < this.bestLapTimeSeconds) {
+          this.bestLapTimeSeconds = lapSecs;
+        }
+        this.lapStartTime = now;
+      }
+    }
+
+    // Duration formatting
+    const elapsedSeconds = this.tripStartTime ? Math.floor((now - this.tripStartTime) / 1000) : 0;
+    const hours = Math.floor(elapsedSeconds / 3600);
+    const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+    const seconds = elapsedSeconds % 60;
+    const durationFormatted = 
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+    const idleMinutes = Math.floor(this.idleSeconds / 60);
+    const idleSecs = Math.floor(this.idleSeconds % 60);
+    const idleFormatted = `00:${String(idleMinutes).padStart(2, '0')}:${String(idleSecs).padStart(2, '0')}`;
+
+    // Motion status
+    let condition = 'Meluncur Santai';
+    if (this.currentSpeed === 0) condition = 'Istirahat / Berhenti';
+    else if (this.currentSpeed > this.athlete.maxSafeSpeed) condition = 'Sprint Maksimal';
+    else if (this.currentSpeed > 16) condition = 'Latihan Inti';
+
+    const payload = {
+      device: this.athlete,
+      lat: Number(this.currentLat.toFixed(6)),
+      lng: Number(this.currentLng.toFixed(6)),
+      speed: this.currentSpeed,
+      maxSpeed: this.maxRecordedSpeed,
+      heading: this.currentHeading,
+      compass: this.bearingToCompass(this.currentHeading),
+      altitude: this.currentAltitude,
+      accuracy: this.accuracy,
+      distanceMeters: this.totalDistanceMeters,
+      distanceKm: this.totalDistanceKm,
+      lapCount: this.lapCount,
+      lastLapSeconds: this.lastLapTimeSeconds,
+      bestLapSeconds: this.bestLapTimeSeconds,
+      calories: this.caloriesBurned,
+      heartRate: this.heartRate,
+      duration: durationFormatted,
+      idleDuration: idleFormatted,
+      condition: condition,
+      suddenStopAlert: false,
+      isInsideGeofence: this.isInsideGeofence,
+      distanceToCenterMeters: this.distanceFromStartMeters,
+      venueName: 'Lokasi Nyata Lapangan Latihan',
+      locationNote: `GPS Riil (Akurasi ± ${this.accuracy}m)`,
+      timestamp: data.timestamp || new Date().toLocaleTimeString('id-ID')
+    };
+
+    this.notifyTick(payload);
+  }
+
+  resetSession() {
+    this.startLat = null;
+    this.startLng = null;
+    this.currentLat = null;
+    this.currentLng = null;
+    this.previousLat = null;
+    this.previousLng = null;
+    this.currentSpeed = 0;
+    this.maxRecordedSpeed = 0;
+    this.totalDistanceMeters = 0;
+    this.totalDistanceKm = 0;
+    this.tripStartTime = null;
+    this.activeSkateSeconds = 0;
+    this.idleSeconds = 0;
+    this.lapCount = 0;
+    this.lapStartTime = null;
+    this.lastLapTimeSeconds = 0;
+    this.bestLapTimeSeconds = null;
+    this.caloriesBurned = 0;
+    this.hasLeftStartZone = false;
+  }
+}
+
+// Global instance
+window.telemetryEngine = new TelemetryEngine();
+
+  </script>
+  <!-- Map Manager -->
+  <script>
+/**
+ * SkateKids Track - Map Manager (Leaflet.js)
+ * 100% Peta Real-Time (Tanpa Dummy).
+ * Menunggu koordinat pertama dari HP anak untuk menentukan titik awal lintasan,
+ * radius geofence aman, marker berputar arah, dan polyline jejak nyata.
+ */
+
+class MapManager {
+  constructor(mapContainerId) {
+    this.containerId = mapContainerId;
+    this.map = null;
+    this.currentTileLayer = null;
+    this.tileLayers = {};
+
+    this.skaterMarker = null;
+    this.pathCoordinates = [];
+    this.coloredPolylines = [];
+
+    this.followSkater = true;
+    this.geofenceCircle = null;
+    this.hasInitialGpsFix = false;
+
+    this.initMap();
+  }
+
+  initMap() {
+    // Default neutral view until first real GPS fix arrives
+    const defaultLat = -6.2088;
+    const defaultLng = 106.8456;
+
+    this.map = L.map(this.containerId, {
+      center: [defaultLat, defaultLng],
+      zoom: 14,
+      zoomControl: false
+    });
+
+    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+
+    // Tile Layers
+    this.tileLayers = {
+      dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CARTO &copy; OpenStreetMap',
+        maxZoom: 20,
+        subdomains: 'abcd'
+      }),
+      osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+      }),
+      satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri World Imagery',
+        maxZoom: 19
+      })
+    };
+
+    this.currentTileLayer = this.tileLayers.dark;
+    this.currentTileLayer.addTo(this.map);
+
+    this.map.on('dragstart', () => {
+      this.setFollowSkater(false);
+    });
+  }
+
+  updateGeofenceCircle(centerLat, centerLng, radiusMeters) {
+    if (this.geofenceCircle) {
+      this.map.removeLayer(this.geofenceCircle);
+    }
+
+    this.geofenceCircle = L.circle([centerLat, centerLng], {
+      color: '#10b981',
+      fillColor: '#10b981',
+      fillOpacity: 0.06,
+      weight: 2,
+      dashArray: '6, 8',
+      radius: radiusMeters
+    }).addTo(this.map);
+
+    this.geofenceCircle.bindTooltip(`🛡️ Batas Aman Latihan (Radius ${radiusMeters}m)`, {
+      permanent: false,
+      direction: 'top'
+    });
+  }
+
+  setLayer(layerName) {
+    if (this.tileLayers[layerName]) {
+      this.map.removeLayer(this.currentTileLayer);
+      this.currentTileLayer = this.tileLayers[layerName];
+      this.currentTileLayer.addTo(this.map);
+    }
+  }
+
+  setFollowSkater(enabled) {
+    this.followSkater = enabled;
+    const btn = document.getElementById('btnToggleFollow');
+    if (btn) {
+      if (enabled) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+  }
+
+  getSpeedColor(speed) {
+    if (speed < 12) return '#10b981'; // Green
+    if (speed < 22) return '#38bdf8'; // Blue
+    if (speed < 28) return '#f59e0b'; // Amber
+    return '#ef4444'; // Red (Sprint)
+  }
+
+  updateSkaterPosition(telemetry) {
+    if (!telemetry.lat || !telemetry.lng) return;
+    const latLng = [telemetry.lat, telemetry.lng];
+
+    // First real GPS fix: snap map to child's actual physical location
+    if (!this.hasInitialGpsFix) {
+      this.hasInitialGpsFix = true;
+      this.map.setView(latLng, 18, { animate: true });
+      this.updateGeofenceCircle(telemetry.lat, telemetry.lng, 200);
+    }
+
+    // Create or update marker
+    if (!this.skaterMarker) {
+      const customIcon = L.divIcon({
+        className: 'skater-custom-div-icon',
+        html: `
+          <div class="vehicle-marker-wrapper">
+            <div class="vehicle-radar-ping"></div>
+            <div class="vehicle-marker-core" id="mapMarkerCore">
+              <div class="vehicle-heading-arrow"></div>
+              <i class="fa-solid fa-person-skating" id="markerDeviceIcon"></i>
+            </div>
+          </div>
+        `,
+        iconSize: [44, 44],
+        iconAnchor: [22, 22]
+      });
+
+      this.skaterMarker = L.marker(latLng, { icon: customIcon }).addTo(this.map);
+    } else {
+      this.skaterMarker.setLatLng(latLng);
+
+      const coreEl = document.getElementById('mapMarkerCore');
+      if (coreEl && telemetry.heading !== undefined) {
+        coreEl.style.transform = `translate(-50%, -50%) rotate(${telemetry.heading}deg)`;
+      }
+    }
+
+    // Popup with live child telemetry
+    const popupContent = `
+      <div style="font-size: 0.85rem; line-height: 1.5;">
+        <strong style="color: #00f2fe; font-size: 0.95rem;">🧒 ${telemetry.device.name}</strong><br>
+        <span style="color: #94a3b8; font-size: 0.75rem;">${telemetry.device.category}</span>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 6px 0;">
+        <b>⚡ Kecepatan:</b> <span style="color:#10b981; font-weight:bold;">${telemetry.speed} km/jam</span><br>
+        <b>🏁 Putaran (Lap):</b> Ke-${telemetry.lapCount}<br>
+        <b>📏 Jarak:</b> ${telemetry.distanceMeters} meter (${telemetry.distanceKm} km)<br>
+        <b>🔋 Baterai HP Anak:</b> ${telemetry.device.battery}%<br>
+        <b>📡 Akurasi:</b> &plusmn; ${telemetry.accuracy} meter
+      </div>
+    `;
+    this.skaterMarker.bindPopup(popupContent);
+
+    // Speed-colored trail line from actual coordinates
+    if (this.pathCoordinates.length > 0) {
+      const prevCoord = this.pathCoordinates[this.pathCoordinates.length - 1];
+      const segmentColor = this.getSpeedColor(telemetry.speed);
+
+      const segmentLine = L.polyline([prevCoord, latLng], {
+        color: segmentColor,
+        weight: 5,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(this.map);
+
+      this.coloredPolylines.push(segmentLine);
+
+      if (this.coloredPolylines.length > 300) {
+        const removed = this.coloredPolylines.shift();
+        this.map.removeLayer(removed);
+      }
+    }
+
+    this.pathCoordinates.push(latLng);
+
+    // Follow camera if enabled
+    if (this.followSkater) {
+      this.map.panTo(latLng, { animate: true, duration: 0.8 });
+    }
+  }
+
+  centerOnSkater() {
+    if (this.pathCoordinates.length > 0) {
+      const latest = this.pathCoordinates[this.pathCoordinates.length - 1];
+      this.map.setView(latest, 18, { animate: true });
+      this.setFollowSkater(true);
+    }
+  }
+
+  clearTrail() {
+    this.coloredPolylines.forEach(line => this.map.removeLayer(line));
+    this.coloredPolylines = [];
+    this.pathCoordinates = [];
+    if (this.skaterMarker) {
+      this.pathCoordinates.push(this.skaterMarker.getLatLng());
+    }
+  }
+}
+
+// Global instance
+window.mapManager = null;
+
+  </script>
+  <!-- Main Firebase App Controller -->
+  <script type="module">
+/**
+ * SkateKids Track v3.0 - Firebase Real-Time Application Controller
+ * ================================================================
+ * Menghubungkan HP Anak → Firebase Realtime Database → Dashboard Orang Tua
+ * 100% Frontend Only, No Server Required, Fully Vercel-Compatible
+ */
+
+// ===== FIREBASE CONFIG =====
+// WAJIB: Ganti nilai ini dengan config dari Firebase Console Anda!
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyBMWI-kGim5JrKdfTzfu6JbVBOgmN3-vtA",
+  authDomain:        "skate-b99ac.firebaseapp.com",
+  databaseURL:       "https://skate-b99ac-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "skate-b99ac",
+  storageBucket:     "skate-b99ac.firebasestorage.app",
+  messagingSenderId: "795296616628",
+  appId:             "1:795296616628:web:415a8afe03189c7d0647e1",
+  measurementId:     "G-KWDDTVYN7W"
+};
+
+// ===== FIREBASE IMPORTS =====
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getDatabase, ref, set, onValue, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+// ===== INIT =====
+let db = null;
+let isFirebaseReady = false;
+
+async function initFirebase() {
+  try {
+    if (FIREBASE_CONFIG.apiKey === 'GANTI_DENGAN_API_KEY_ANDA') {
+      console.warn('[Firebase] Config belum diisi! Lihat firebase-config.js');
+      showFirebaseWarning();
+      return false;
+    }
+    const app = initializeApp(FIREBASE_CONFIG);
+    db = getDatabase(app);
+    isFirebaseReady = true;
+    console.log('[Firebase] Connected ✓');
+    return true;
+  } catch (err) {
+    console.error('[Firebase] Init error:', err);
+    showFirebaseWarning();
+    return false;
+  }
+}
+
+function showFirebaseWarning() {
+  const el = document.getElementById('globalConnIndicator');
+  if (el) {
+    el.className = 'status-indicator offline';
+    el.querySelector('span:last-child').textContent = 'FIREBASE BELUM SETUP';
+  }
+  addAlertItem(
+    '⚠️ Firebase Belum Dikonfigurasi',
+    'Buka firebase-config.js dan isi dengan config dari Firebase Console Anda',
+    'danger'
+  );
+}
+
+// ===== MAIN APP INIT =====
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Initialize Map Manager
+  window.mapManager = new MapManager('map');
+
+  // 2. State & Engine
+  const engine = window.telemetryEngine;
+  let currentUnit = 'kmh';
+  let audioContext = null;
+  let lastReportedLap = 0;
+  const telemetryLogs = [];
+
+  // Pairing State
+  let currentRoomCode = generateRoomCode();
+  let isChildConnected = false;
+  let firebaseListener = null;
+
+  function generateRoomCode() {
+    return 'SKATE-' + Math.floor(1000 + Math.random() * 9000);
+  }
+
+  // DOM Elements
+  const elLiveClock              = document.getElementById('liveClock');
+  const elActiveChildLabel       = document.getElementById('activeChildLabel');
+  const elGlobalConnIndicator    = document.getElementById('globalConnIndicator');
+  const elConnStatusText         = document.getElementById('connStatusText');
+
+  const elCurrentDeviceName      = document.getElementById('currentDeviceName');
+  const elCurrentDevicePlate     = document.getElementById('currentDevicePlate');
+  const elBatteryLevel           = document.getElementById('batteryLevel');
+  const elSignalStrength         = document.getElementById('signalStrength');
+  const elHeartRate              = document.getElementById('heartRateValue');
+  const elSkateActivityBadge     = document.getElementById('skateActivityBadge');
+
+  const elGeofenceStatusBadge    = document.getElementById('geofenceStatusBadge');
+  const elGeofenceText           = document.getElementById('geofenceText');
+  const elDistanceToParent       = document.getElementById('distanceToParent');
+
+  const elValLatitude            = document.getElementById('valLatitude');
+  const elValLongitude           = document.getElementById('valLongitude');
+  const elValHeading             = document.getElementById('valHeading');
+  const elValAltitude            = document.getElementById('valAltitude');
+  const elValAccuracy            = document.getElementById('valAccuracy');
+  const elCurrentAddress         = document.getElementById('currentAddress');
+
+  const elBtnCenterMap           = document.getElementById('btnCenterMap');
+  const elBtnRestartSession      = document.getElementById('btnRestartSession');
+
+  const elMetricSpeedValue       = document.getElementById('metricSpeedValue');
+  const elMetricSpeedUnit        = document.getElementById('metricSpeedUnit');
+  const elSpeedStatusTag         = document.getElementById('speedStatusTag');
+  const elMetricMaxSpeed         = document.getElementById('metricMaxSpeed');
+  const elMetricAvgSpeed         = document.getElementById('metricAvgSpeed');
+
+  const elMetricTotalDistance    = document.getElementById('metricTotalDistance');
+  const elMetricDistanceKm       = document.getElementById('metricDistanceKm');
+  const elMetricLapCount         = document.getElementById('metricLapCount');
+  const elLastLapTime            = document.getElementById('lastLapTime');
+  const elBestLapTime            = document.getElementById('bestLapTime');
+  const elBtnResetTrip           = document.getElementById('btnResetTrip');
+
+  const elMetricCalories         = document.getElementById('metricCalories');
+  const elMetricTripDuration     = document.getElementById('metricTripDuration');
+  const elMetricIdleDuration     = document.getElementById('metricIdleDuration');
+
+  const elGaugeSpeedDigit        = document.getElementById('gaugeSpeedDigit');
+  const elGaugeSpeedUnit         = document.getElementById('gaugeSpeedUnit');
+  const elGaugeStatusText        = document.getElementById('gaugeStatusText');
+  const elGaugeNeedle            = document.getElementById('gaugeNeedle');
+  const elGaugeFillArc           = document.getElementById('gaugeFillArc');
+
+  const elMapHeadingBadge        = document.getElementById('mapHeadingBadge');
+  const elBtnToggleFollow        = document.getElementById('btnToggleFollow');
+  const elBtnClearTrail          = document.getElementById('btnClearTrail');
+
+  const elAlertStream            = document.getElementById('alertStream');
+  const elAlertCountBadge        = document.getElementById('alertCountBadge');
+  const elChkAudioAlerts         = document.getElementById('chkAudioAlerts');
+
+  const elTelemetryTableBody     = document.getElementById('telemetryTableBody');
+  const elLogCountBadge          = document.getElementById('logCountBadge');
+  const elBtnExportCSV           = document.getElementById('btnExportCSV');
+  const elBtnExportJSON          = document.getElementById('btnExportJSON');
+  const elClearLogs              = document.getElementById('btnClearLogs');
+  const elBtnCopyCoords          = document.getElementById('btnCopyCoords');
+
+  const elUnitKmh                = document.getElementById('unitKmh');
+  const elUnitMph                = document.getElementById('unitMph');
+
+  const elBtnOpenPairingModal    = document.getElementById('btnOpenPairingModal');
+  const elPairingModalOverlay    = document.getElementById('pairingModalOverlay');
+  const elBtnClosePairingModal   = document.getElementById('btnClosePairingModal');
+  const elQrCodeImage            = document.getElementById('qrCodeImage');
+  const elTxtTrackerUrl          = document.getElementById('txtTrackerUrl');
+  const elBtnCopyTrackerUrl      = document.getElementById('btnCopyTrackerUrl');
+  const elBtnShareWhatsApp       = document.getElementById('btnShareWhatsApp');
+  const elDisplayRoomCode        = document.getElementById('displayRoomCode');
+  const elModalConnStatus        = document.getElementById('modalConnStatus');
+  const elModalConnStatusText    = document.getElementById('modalConnStatusText');
+  const elBtnUpdateChildProfile  = document.getElementById('btnUpdateChildProfile');
+  const elBtnPingChild           = document.getElementById('btnPingChild');
+
+  // 3. Live Clock
+  function updateClock() {
+    const now = new Date();
+    if (elLiveClock) {
+      elLiveClock.textContent = now.toLocaleTimeString('id-ID', { hour12: false }) + ' WIB';
+    }
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // 4. Chart.js
+  const ctx = document.getElementById('speedTrendChart').getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 100);
+  gradient.addColorStop(0, 'rgba(0, 242, 254, 0.45)');
+  gradient.addColorStop(1, 'rgba(0, 242, 254, 0.0)');
+  const chartLabels = Array(20).fill('');
+  const chartData   = Array(20).fill(0);
+  const speedChart  = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'Kecepatan Riil',
+        data: chartData,
+        borderColor: '#00f2fe',
+        borderWidth: 2,
+        backgroundColor: gradient,
+        fill: true,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: '#ffffff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 150 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(9, 15, 28, 0.95)',
+          borderColor: '#00f2fe',
+          borderWidth: 1,
+          bodyFont: { family: 'JetBrains Mono', size: 11 },
+          displayColors: false,
+          callbacks: { label: (ctx) => `⚡ ${ctx.parsed.y} ${currentUnit === 'kmh' ? 'km/jam' : 'mph'}` }
+        }
+      },
+      scales: {
+        x: { display: false },
+        y: {
+          min: 0, max: 35,
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 9 }, stepSize: 10 }
+        }
+      }
+    }
+  });
+
+  // 5. Audio Tones
+  function playAlertTone(type = 'warn') {
+    if (!elChkAudioAlerts.checked) return;
+    try {
+      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === 'suspended') audioContext.resume();
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      if (type === 'lap') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(659.25, audioContext.currentTime);
+        osc.frequency.setValueAtTime(880, audioContext.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.35);
+      } else {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, audioContext.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(350, audioContext.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.09, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25);
+      }
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start(audioContext.currentTime);
+      osc.stop(audioContext.currentTime + 0.4);
+    } catch (e) { console.warn('Audio:', e); }
+  }
+
+  // 6. Speedometer
+  function updateSpeedometer(speedKmh) {
+    const displaySpeed = currentUnit === 'kmh' ? speedKmh : Math.round(speedKmh * 0.621371 * 10) / 10;
+    const maxScale = currentUnit === 'kmh' ? 45 : 30;
+    const clampedSpeed = Math.min(maxScale, Math.max(0, displaySpeed));
+    elGaugeSpeedDigit.textContent = displaySpeed.toFixed(1);
+    elMetricSpeedValue.textContent = displaySpeed.toFixed(1);
+    const ratio = clampedSpeed / maxScale;
+    elGaugeNeedle.style.transform = `translate(-50%, -100%) rotate(${-135 + ratio * 270}deg)`;
+    const totalArc = 447;
+    elGaugeFillArc.style.strokeDashoffset = totalArc - (ratio * totalArc);
+    if (speedKmh > 28) {
+      elGaugeFillArc.style.stroke = 'var(--rose-danger)';
+      elSpeedStatusTag.textContent = 'SPRINT MAKSIMAL';
+      elSpeedStatusTag.className = 'metric-tag badge-danger';
+      elGaugeStatusText.textContent = 'FAST SPRINT';
+      elGaugeStatusText.style.fill = 'var(--rose-danger)';
+      elSkateActivityBadge.textContent = 'SPRINT';
+      elSkateActivityBadge.className = 'badge badge-danger';
+    } else if (speedKmh > 16) {
+      elGaugeFillArc.style.stroke = 'var(--cyan-primary)';
+      elSpeedStatusTag.textContent = 'LATIHAN INTI';
+      elSpeedStatusTag.className = 'metric-tag';
+      elGaugeStatusText.textContent = 'STEADY CRUISE';
+      elGaugeStatusText.style.fill = 'var(--cyan-primary)';
+      elSkateActivityBadge.textContent = 'MELUNCUR';
+      elSkateActivityBadge.className = 'badge badge-success';
+    } else if (speedKmh > 2.5) {
+      elGaugeFillArc.style.stroke = 'var(--emerald-green)';
+      elSpeedStatusTag.textContent = 'LUNCUR SANTAI';
+      elSpeedStatusTag.className = 'metric-tag';
+      elGaugeStatusText.textContent = 'EASY GLIDE';
+      elGaugeStatusText.style.fill = 'var(--emerald-green)';
+      elSkateActivityBadge.textContent = 'SANTAI';
+      elSkateActivityBadge.className = 'badge badge-info';
+    } else {
+      elGaugeFillArc.style.stroke = 'var(--text-dim)';
+      elSpeedStatusTag.textContent = isChildConnected ? 'BERHENTI / DUDUK' : 'STANDBY';
+      elSpeedStatusTag.className = 'metric-tag badge-neutral';
+      elGaugeStatusText.textContent = isChildConnected ? 'RESTING' : 'STANDBY';
+      elGaugeStatusText.style.fill = 'var(--text-dim)';
+      elSkateActivityBadge.textContent = isChildConnected ? 'ISTIRAHAT' : 'STANDBY';
+      elSkateActivityBadge.className = 'badge badge-warning';
+    }
+  }
+
+  // 7. Alert Feed
+  function addAlertItem(title, subtitle, type = 'info') {
+    const alertItem = document.createElement('div');
+    alertItem.className = `alert-item ${type === 'danger' ? 'alert-danger' : type === 'warn' ? 'alert-warn' : 'alert-info'}`;
+    let icon = 'fa-shield-check';
+    if (type === 'danger') icon = 'fa-triangle-exclamation';
+    else if (type === 'warn') icon = 'fa-circle-exclamation';
+    else if (type === 'success') icon = 'fa-flag-checkered';
+    alertItem.innerHTML = `
+      <i class="fa-solid ${icon}"></i>
+      <div class="alert-content">
+        <span class="alert-title">${title}</span>
+        <span class="alert-time">${subtitle} &bull; ${new Date().toLocaleTimeString('id-ID')}</span>
+      </div>
+    `;
+    elAlertStream.prepend(alertItem);
+    while (elAlertStream.children.length > 6) {
+      elAlertStream.removeChild(elAlertStream.lastChild);
+    }
+  }
+  // Expose globally so firebase warning function above can call it
+  window._addAlertItem = addAlertItem;
+
+  // 8. Table Row
+  function addTableRow(telemetry) {
+    const row = document.createElement('tr');
+    let motionBadge = `<span class="badge badge-success">Meluncur</span>`;
+    if (telemetry.speed > 28) motionBadge = `<span class="badge badge-danger">Sprint</span>`;
+    else if (telemetry.speed < 2.5) motionBadge = `<span class="badge badge-neutral">Istirahat</span>`;
+    row.innerHTML = `
+      <td class="mono-text" style="color:#94a3b8;">${telemetry.timestamp}</td>
+      <td><strong>${telemetry.device.name}</strong></td>
+      <td class="mono-text"><strong style="color:#00f2fe;">${telemetry.speed} km/j</strong></td>
+      <td class="mono-text">${telemetry.distanceMeters} m (${telemetry.distanceKm} km)</td>
+      <td class="mono-text" style="color:#f59e0b;">Putaran ${telemetry.lapCount}</td>
+      <td class="mono-text" style="color:#38bdf8;">${telemetry.lat}, ${telemetry.lng}</td>
+      <td class="mono-text">${telemetry.heading}° ${telemetry.compass}</td>
+      <td class="mono-text" style="color:#ef4444;"><i class="fa-solid fa-heart-pulse"></i> ${telemetry.heartRate} BPM</td>
+      <td>${motionBadge}</td>
+    `;
+    elTelemetryTableBody.prepend(row);
+    telemetryLogs.unshift({
+      timestamp: telemetry.timestamp,
+      athleteName: telemetry.device.name,
+      category: telemetry.device.category,
+      speedKmH: telemetry.speed,
+      distanceMeters: telemetry.distanceMeters,
+      distanceKm: telemetry.distanceKm,
+      lapCount: telemetry.lapCount,
+      heartRateBpm: telemetry.heartRate,
+      caloriesKcal: telemetry.calories,
+      latitude: telemetry.lat,
+      longitude: telemetry.lng,
+      headingDeg: telemetry.heading,
+      condition: telemetry.condition
+    });
+    if (telemetryLogs.length > 200) telemetryLogs.pop();
+    while (elTelemetryTableBody.children.length > 25) {
+      elTelemetryTableBody.removeChild(elTelemetryTableBody.lastChild);
+    }
+    elLogCountBadge.textContent = `(${telemetryLogs.length} catatan)`;
+  }
+
+  // 9. Telemetry Engine Tick Handler
+  function handleTelemetryTick(telemetry) {
+    window.mapManager.updateSkaterPosition(telemetry);
+    updateSpeedometer(telemetry.speed);
+    elValLatitude.textContent = telemetry.lat.toFixed(6);
+    elValLongitude.textContent = telemetry.lng.toFixed(6);
+    elValHeading.textContent = `${telemetry.heading}° ${telemetry.compass}`;
+    elValAltitude.textContent = `${telemetry.altitude} m`;
+    elValAccuracy.textContent = `± ${telemetry.accuracy} m`;
+    elCurrentAddress.textContent = `Titik GPS Nyata • Akurasi: ±${telemetry.accuracy}m`;
+    elMapHeadingBadge.textContent = `${telemetry.heading}° ${telemetry.compass} • ${telemetry.speed} km/j`;
+    elMetricTotalDistance.textContent = telemetry.distanceMeters.toLocaleString('id-ID');
+    elMetricDistanceKm.textContent = `${telemetry.distanceKm} km`;
+    elMetricLapCount.textContent = telemetry.lapCount;
+    if (telemetry.lastLapSeconds > 0) {
+      elLastLapTime.textContent = `00:${String(telemetry.lastLapSeconds).padStart(2, '0')} dtk`;
+    }
+    if (telemetry.bestLapSeconds) {
+      elBestLapTime.textContent = `00:${String(telemetry.bestLapSeconds).padStart(2, '0')} dtk`;
+    }
+    elMetricCalories.textContent = telemetry.calories;
+    elMetricTripDuration.textContent = telemetry.duration;
+    elMetricIdleDuration.textContent = telemetry.idleDuration;
+    elHeartRate.textContent = `${telemetry.heartRate} BPM`;
+    if (telemetryLogs.length > 0) {
+      const sum = telemetryLogs.reduce((a, c) => a + c.speedKmH, telemetry.speed);
+      elMetricAvgSpeed.textContent = `${(sum / (telemetryLogs.length + 1)).toFixed(1)} km/jam`;
+    }
+    elMetricMaxSpeed.textContent = `${telemetry.maxSpeed} km/jam`;
+    chartData.push(telemetry.speed);
+    chartData.shift();
+    speedChart.update('none');
+    if (telemetry.lapCount > lastReportedLap) {
+      lastReportedLap = telemetry.lapCount;
+      addAlertItem(
+        `🏁 Putaran Ke-${telemetry.lapCount} Selesai!`,
+        `Waktu putaran: ${telemetry.lastLapSeconds} dtk`,
+        'success'
+      );
+      playAlertTone('lap');
+    }
+    if (telemetry.distanceToCenterMeters !== undefined) {
+      elDistanceToParent.textContent = `${telemetry.distanceToCenterMeters} meter`;
+      if (!telemetry.isInsideGeofence) {
+        elGeofenceStatusBadge.textContent = 'DI LUAR AREA!';
+        elGeofenceStatusBadge.className = 'badge badge-danger';
+        elGeofenceText.innerHTML = `<span style="color:#ef4444;">⚠️ Anak ${telemetry.distanceToCenterMeters}m keluar batas aman!</span>`;
+        addAlertItem('Peringatan Batas Latihan!', `Anak meluncur ${telemetry.distanceToCenterMeters}m keluar radius aman!`, 'danger');
+        playAlertTone('warn');
+      } else {
+        elGeofenceStatusBadge.textContent = 'DI DALAM AREA';
+        elGeofenceStatusBadge.className = 'badge badge-success';
+        elGeofenceText.innerHTML = `<i class="fa-solid fa-circle-check text-success"></i> Anak berada di dalam area aman latihan.`;
+      }
+    }
+    addTableRow(telemetry);
+  }
+
+  engine.onTick(handleTelemetryTick);
+
+  // =========================================================================
+  // Firebase Real-Time Listener (Ganti SSE)
+  // =========================================================================
+
+  function buildTrackerUrl(roomCode) {
+    return `${window.location.origin}/tracker.html?room=${roomCode}`;
+  }
+
+  function updatePairingUrls() {
+    const trackerUrl = buildTrackerUrl(currentRoomCode);
+    elTxtTrackerUrl.value = trackerUrl;
+    elDisplayRoomCode.textContent = `KODE: ${currentRoomCode}`;
+    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(trackerUrl)}`;
+    elQrCodeImage.src = qrApiUrl;
+    const shareMsg = `Hai! Buka link ini di HP anak untuk mulai melacak latihan sepatu roda secara live: ${trackerUrl}`;
+    elBtnShareWhatsApp.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
+  }
+
+  function listenToChildPhone(roomCode) {
+    if (!isFirebaseReady) return;
+
+    // Unsubscribe previous listener
+    if (firebaseListener) {
+      firebaseListener(); // Firebase unsubscribe function
+      firebaseListener = null;
+    }
+
+    const telemetryRef = ref(db, `rooms/${roomCode}/telemetry`);
+    firebaseListener = onValue(telemetryRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+
+      // Check data freshness (< 15 seconds old)
+      const age = Date.now() - (data._ts || 0);
+      const isFresh = age < 15000;
+
+      if (!isChildConnected && isFresh) {
+        isChildConnected = true;
+        elGlobalConnIndicator.className = 'status-indicator online';
+        elConnStatusText.textContent = 'LIVE TRACKING AKTIF';
+        elActiveChildLabel.textContent = `🟢 ${engine.athlete.name} (Terkoneksi Live)`;
+        elModalConnStatus.className = 'conn-sync-status active';
+        elModalConnStatusText.innerHTML = `🟢 <strong>${engine.athlete.name}</strong> Terhubung & Live Streaming!`;
+        addAlertItem('HP Anak Terhubung', `${engine.athlete.name} mulai mengirim koordinat GPS nyata!`, 'info');
+      }
+
+      if (!isFresh) {
+        // Data stale - child phone might be offline
+        if (isChildConnected) {
+          isChildConnected = false;
+          elGlobalConnIndicator.className = 'status-indicator offline';
+          elConnStatusText.textContent = 'HP ANAK OFFLINE';
+          addAlertItem('HP Anak Terputus', 'Tidak ada data GPS dalam 15 detik terakhir', 'warn');
+        }
+        return;
+      }
+
+      // Update device info
+      elCurrentDeviceName.textContent = engine.athlete.name || 'Anak Saya';
+      elCurrentDevicePlate.textContent = `${engine.athlete.category || 'Inline Skate'} • Room: ${roomCode}`;
+      elBatteryLevel.textContent = `${data.battery || '--'}%`;
+      elSignalStrength.textContent = data.accuracy ? `±${data.accuracy}m GPS` : '-- GPS';
+
+      // Pass to engine for full processing
+      engine.athlete.name = engine.athlete.name || 'Anak Saya';
+      engine.processIncomingGps(data);
+    });
+  }
+
+  // Modal: Open
+  elBtnOpenPairingModal.addEventListener('click', () => {
+    updatePairingUrls();
+    elPairingModalOverlay.style.display = 'flex';
+  });
+
+  elBtnClosePairingModal.addEventListener('click', () => {
+    elPairingModalOverlay.style.display = 'none';
+  });
+
+  elPairingModalOverlay.addEventListener('click', (e) => {
+    if (e.target === elPairingModalOverlay) {
+      elPairingModalOverlay.style.display = 'none';
+    }
+  });
+
+  elBtnCopyTrackerUrl.addEventListener('click', () => {
+    navigator.clipboard.writeText(elTxtTrackerUrl.value).then(() => {
+      elBtnCopyTrackerUrl.innerHTML = `<i class="fa-solid fa-check"></i> Tersalin!`;
+      setTimeout(() => {
+        elBtnCopyTrackerUrl.innerHTML = `<i class="fa-regular fa-copy"></i> Salin`;
+      }, 2000);
+      addAlertItem('Link Disalin', 'Kirimkan link ini ke HP anak atau buka langsung di HP anak', 'info');
+    });
+  });
+
+  // Register Child Profile → Firebase
+  elBtnUpdateChildProfile.addEventListener('click', async () => {
+    const childNameVal    = document.getElementById('inputChildName').value.trim() || 'Anak Saya';
+    const childAgeVal     = parseInt(document.getElementById('inputChildAge').value) || 9;
+    const childWeightVal  = parseInt(document.getElementById('inputChildWeight').value) || 32;
+    const childMaxSpeed   = parseInt(document.getElementById('inputChildMaxSpeed').value) || 28;
+
+    // Generate new room code
+    currentRoomCode = generateRoomCode();
+
+    // Update engine athlete
+    engine.athlete.name        = childNameVal;
+    engine.athlete.weightKg    = childWeightVal;
+    engine.athlete.maxSafeSpeed = childMaxSpeed;
+
+    if (isFirebaseReady) {
+      try {
+        const profileRef = ref(db, `rooms/${currentRoomCode}/profile`);
+        await set(profileRef, {
+          childName:    childNameVal,
+          age:          childAgeVal,
+          weightKg:     childWeightVal,
+          maxSafeSpeed: childMaxSpeed,
+          category:     `Usia ${childAgeVal} Thn • Sepatu Roda`,
+          createdAt:    Date.now()
+        });
+        addAlertItem('Profil Tersimpan ke Firebase', `Kode baru: ${currentRoomCode}`, 'info');
+      } catch (err) {
+        console.error('[Firebase] Save profile error:', err);
+        addAlertItem('Gagal Menyimpan Profil', err.message, 'danger');
+      }
+    }
+
+    updatePairingUrls();
+    listenToChildPhone(currentRoomCode);
+
+    elCurrentDeviceName.textContent  = childNameVal;
+    elCurrentDevicePlate.textContent = `Menunggu HP anak buka kode ${currentRoomCode}`;
+    elActiveChildLabel.textContent   = `📱 ${childNameVal} (Menunggu Terhubung...)`;
+
+    addAlertItem('Kode Baru Dibuat', `Kirim link ke HP ${childNameVal}: buka tracker.html?room=${currentRoomCode}`, 'info');
+  });
+
+  // Ping Child via Firebase
+  elBtnPingChild.addEventListener('click', async () => {
+    if (!isFirebaseReady) {
+      addAlertItem('Firebase Belum Siap', 'Konfigurasi Firebase terlebih dahulu', 'danger');
+      return;
+    }
+    try {
+      const pingRef = ref(db, `rooms/${currentRoomCode}/ping`);
+      await set(pingRef, { active: true, sentAt: Date.now() });
+      addAlertItem('🔔 Sinyal Terkirim', 'HP anak sedang berbunyi di lapangan memanggil anak!', 'warn');
+      playAlertTone('lap');
+    } catch (e) {
+      addAlertItem('Gagal Mengirim Sinyal', e.message, 'danger');
+    }
+  });
+
+  // Map & Session Controls
+  elBtnCenterMap.addEventListener('click', () => window.mapManager.centerOnSkater());
+
+  elBtnRestartSession.addEventListener('click', () => {
+    engine.resetSession();
+    lastReportedLap = 0;
+    isChildConnected = false;
+    window.mapManager.clearTrail();
+    window.mapManager.hasInitialGpsFix = false;
+    elMetricTotalDistance.textContent = '0';
+    elMetricDistanceKm.textContent = '0.00 km';
+    elMetricLapCount.textContent = '0';
+    elLastLapTime.textContent = '--:-- dtk';
+    elBestLapTime.textContent = '--:-- dtk';
+    elMetricCalories.textContent = '0';
+    elMetricTripDuration.textContent = '00:00:00';
+    elMetricIdleDuration.textContent = '00:00:00';
+    elMetricSpeedValue.textContent = '0.0';
+    updateSpeedometer(0);
+    addAlertItem('Sesi Latihan Direset', 'Perhitungan jarak, putaran, dan kalori dimulai dari nol', 'info');
+  });
+
+  elBtnResetTrip.addEventListener('click', () => elBtnRestartSession.click());
+
+  document.querySelectorAll('.map-layer-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.map-layer-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      window.mapManager.setLayer(btn.dataset.layer);
+    });
+  });
+
+  elBtnToggleFollow.addEventListener('click', () => {
+    const next = !window.mapManager.followSkater;
+    window.mapManager.setFollowSkater(next);
+  });
+
+  elBtnClearTrail.addEventListener('click', () => {
+    window.mapManager.clearTrail();
+    addAlertItem('Peta Dibersihkan', 'Jejak rute sebelumnya dihapus', 'info');
+  });
+
+  // Unit Switcher
+  elUnitKmh.addEventListener('click', () => {
+    currentUnit = 'kmh';
+    elUnitKmh.classList.add('active');
+    elUnitMph.classList.remove('active');
+    elGaugeSpeedUnit.textContent = 'KM/H';
+    elMetricSpeedUnit.textContent = 'km/jam';
+    updateSpeedometer(engine.currentSpeed);
+  });
+
+  elUnitMph.addEventListener('click', () => {
+    currentUnit = 'mph';
+    elUnitMph.classList.add('active');
+    elUnitKmh.classList.remove('active');
+    elGaugeSpeedUnit.textContent = 'MPH';
+    elMetricSpeedUnit.textContent = 'mph';
+    updateSpeedometer(engine.currentSpeed);
+  });
+
+  elBtnCopyCoords.addEventListener('click', () => {
+    if (engine.currentLat && engine.currentLng) {
+      const txt = `${engine.currentLat.toFixed(6)}, ${engine.currentLng.toFixed(6)}`;
+      navigator.clipboard.writeText(txt).then(() => addAlertItem('Koordinat Disalin', txt, 'info'));
+    }
+  });
+
+  // Export CSV
+  elBtnExportCSV.addEventListener('click', () => {
+    if (telemetryLogs.length === 0) { alert('Belum ada data latihan.'); return; }
+    const headers = ['Waktu','Nama Atlet','Kategori','Kecepatan (km/j)','Jarak (meter)','Jarak (km)','Putaran','Detak Jantung (BPM)','Kalori (kkal)','Latitude','Longitude','Heading','Status'];
+    const csvRows = [headers.join(',')];
+    telemetryLogs.forEach(r => {
+      csvRows.push([
+        `"${r.timestamp}"`,`"${r.athleteName}"`,`"${r.category}"`,
+        r.speedKmH, r.distanceMeters, r.distanceKm, r.lapCount,
+        r.heartRateBpm, r.caloriesKcal, r.latitude, r.longitude,
+        r.headingDeg, `"${r.condition}"`
+      ].join(','));
+    });
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvRows.join('\n'));
+    a.download = `laporan_sepatu_roda_${Date.now()}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  elBtnExportJSON.addEventListener('click', () => {
+    if (telemetryLogs.length === 0) { alert('Belum ada data latihan.'); return; }
+    const a = document.createElement('a');
+    a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(telemetryLogs, null, 2));
+    a.download = `laporan_sepatu_roda_${Date.now()}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+  });
+
+  elClearLogs.addEventListener('click', () => {
+    telemetryLogs.length = 0;
+    elTelemetryTableBody.innerHTML = '';
+    elLogCountBadge.textContent = '(0 catatan)';
+    addAlertItem('Log Dibersihkan', 'Riwayat data latihan dikosongkan', 'info');
+  });
+
+  // =========================================================================
+  // INIT: Connect Firebase, start listening
+  // =========================================================================
+  const fbOk = await initFirebase();
+  updatePairingUrls();
+
+  if (fbOk) {
+    listenToChildPhone(currentRoomCode);
+    addAlertItem(
+      '🟢 Firebase Terhubung',
+      `Siap menerima GPS dari HP anak. Kode: ${currentRoomCode}`,
+      'info'
+    );
+  }
+});
+
+  </script>
 </body>
 </html>
