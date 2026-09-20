@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+  <title>SkateKids Tracker - Mode HP Anak</title>
+  <meta name="description" content="Aplikasi pemancar GPS sepatu roda khusus HP anak. Terhubung langsung ke dashboard orang tua.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    :root {
+      --bg: #070a13;
+      --card-bg: rgba(14, 22, 40, 0.85);
+      --cyan: #00f2fe;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(0, 242, 254, 0.12) 0%, transparent 50%),
+        linear-gradient(180deg, #070a13 0%, #0d1629 100%);
+      padding: 16px;
+      user-select: none;
+    }
+
+    .tracker-container {
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* Top Status Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .room-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .parent-conn-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--green);
+      background: rgba(16, 185, 129, 0.12);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    /* Child Hero Card */
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .skater-avatar {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(16, 185, 129, 0.2));
+      border: 2px solid var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .child-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .child-category {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Live Speed Readout */
+    .speed-box {
+      margin: 20px 0;
+      padding: 16px;
+      background: rgba(10, 16, 30, 0.7);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .speed-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .speed-digits {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+      display: inline-block;
+    }
+
+    .speed-unit {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-left: 6px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stat-card i {
+      font-size: 1.4rem;
+    }
+
+    .stat-card.distance i { color: var(--cyan); }
+    .stat-card.accuracy i { color: var(--green); }
+    .stat-card.time i { color: var(--amber); }
+    .stat-card.battery i { color: #38bdf8; }
+
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .stat-label-mini {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .stat-value-mini {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Big Action Button */
+    .action-button-area {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-toggle-tracking {
+      width: 100%;
+      padding: 18px;
+      border-radius: 16px;
+      border: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.35);
+    }
+
+    .btn-toggle-tracking.start {
+      background: linear-gradient(135deg, #00f2fe, #10b981);
+      color: #070a13;
+    }
+
+    .btn-toggle-tracking.stop {
+      background: linear-gradient(135deg, #ef4444, #f59e0b);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35);
+    }
+
+    .wake-lock-info {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Parent Alert Modal / Popup */
+    .parent-alert-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 10, 19, 0.9);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .parent-alert-card {
+      background: #111827;
+      border: 2px solid var(--amber);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      max-width: 360px;
+      animation: bounce 0.5s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: scale(0.98); }
+      to { transform: scale(1.02); }
+    }
+
+    .parent-alert-card i {
+      font-size: 3rem;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+
+    .btn-ack {
+      margin-top: 16px;
+      background: var(--amber);
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="tracker-container">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="room-badge">
+        <i class="fa-solid fa-satellite"></i>
+        <span id="txtRoomCode">SKATE-8821</span>
+      </div>
+      <div class="parent-conn-status" id="connBadge">
+        <span class="pulse-dot"></span>
+        <span id="connText">TERHUBUNG KE ORANG TUA</span>
+      </div>
+    </header>
+
+    <!-- Child Profile Card -->
+    <main class="hero-card">
+      <div class="skater-avatar">
+        <i class="fa-solid fa-person-skating"></i>
+      </div>
+      <h1 class="child-name" id="childDisplayName">Kevin Pratama</h1>
+      <p class="child-category" id="childCategoryName">Inline Speed Skate • Usia 9 Thn</p>
+
+      <!-- Big Speed Readout -->
+      <div class="speed-box">
+        <span class="speed-label"><i class="fa-solid fa-gauge-high"></i> Kecepatan Meluncur</span>
+        <span class="speed-digits" id="liveSpeedText">0.0</span>
+        <span class="speed-unit">km/j</span>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card distance">
+          <i class="fa-solid fa-road"></i>
+          <div class="stat-info">
+            <span class="stat-label-mini">Jarak Latihan</span>
+            <span class="stat-value-mini" id="liveDistanceText">0 meter</span>
+          </div>
+        </div>
+
+        <div class="stat-card accuracy">
+          <i class="fa-solid fa-location-crosshairs"></i>
+          <div class="stat-info">
+            <span class="stat-label-mini">Akurasi GPS</span>
+            <span class="stat-value-mini" id="liveAccuracyText">&plusmn; 2.1 m</span>
+          </div>
+        </div>
+
+        <div class="stat-card time">
+          <i class="fa-solid fa-stopwatch"></i>
+          <div class="stat-info">
+            <span class="stat-label-mini">Waktu Meluncur</span>
+            <span class="stat-value-mini" id="liveDurationText">00:00:00</span>
+          </div>
+        </div>
+
+        <div class="stat-card battery">
+          <i class="fa-solid fa-battery-three-quarters"></i>
+          <div class="stat-info">
+            <span class="stat-label-mini">Baterai HP</span>
+            <span class="stat-value-mini" id="liveBatteryText">94%</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Action & Controls -->
+    <footer class="action-button-area">
+      <button class="btn-toggle-tracking start" id="btnToggleTracking">
+        <i class="fa-solid fa-play"></i>
+        <span id="btnActionText">MULAI MELUNCUR ⛸️</span>
+      </button>
+
+      <div class="wake-lock-info">
+        <i class="fa-solid fa-mobile-screen"></i>
+        <span>Layar dijaga tetap aktif agar GPS tetap merekam di saku/armband</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Parent Ping / Call Modal -->
+  <div class="parent-alert-overlay" id="parentAlertModal">
+    <div class="parent-alert-card">
+      <i class="fa-solid fa-bell-concierge"></i>
+      <h2>Panggilan Orang Tua!</h2>
+      <p style="margin-top: 8px; color: #cbd5e1; font-size: 0.9rem;">
+        Orang tua Anda memanggil Anda ke tepi lintasan sekarang.
+      </p>
+      <button class="btn-ack" id="btnAckPing">Saya Mengerti! 👍</button>
+    </div>
+  </div>
+
+  <script>
+    // Extract Room Code from URL: ?room=SKATE-XXXX
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomCode = urlParams.get('room') || 'SKATE-8821';
+    document.getElementById('txtRoomCode').textContent = roomCode;
+
+    // State
+    let isTracking = false;
+    let watchId = null;
+    let wakeLock = null;
+    let totalDistanceMeters = 0;
+    let lastLat = null;
+    let lastLng = null;
+    let lastFixTime = null;
+    let startTime = null;
+    let timerInterval = null;
+    let batteryLevel = 95;
+    let audioContext = null;
+
+    // DOM Elements
+    const btnToggle = document.getElementById('btnToggleTracking');
+    const btnActionText = document.getElementById('btnActionText');
+    const liveSpeed = document.getElementById('liveSpeedText');
+    const liveDistance = document.getElementById('liveDistanceText');
+    const liveAccuracy = document.getElementById('liveAccuracyText');
+    const liveDuration = document.getElementById('liveDurationText');
+    const liveBattery = document.getElementById('liveBatteryText');
+    const childName = document.getElementById('childDisplayName');
+    const childCategory = document.getElementById('childCategoryName');
+    const connText = document.getElementById('connText');
+    const parentAlertModal = document.getElementById('parentAlertModal');
+    const btnAckPing = document.getElementById('btnAckPing');
+
+    // Haversine Distance
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371000; // meters
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+                Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // Battery Status API
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then(battery => {
+        batteryLevel = Math.round(battery.level * 100);
+        liveBattery.textContent = `${batteryLevel}%`;
+        battery.addEventListener('levelchange', () => {
+          batteryLevel = Math.round(battery.level * 100);
+          liveBattery.textContent = `${batteryLevel}%`;
+        });
+      });
+    }
+
+    // Screen Wake Lock API to prevent phone sleep in pocket/armband
+    async function requestWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          console.log('Screen WakeLock active');
+        }
+      } catch (err) {
+        console.warn('WakeLock error:', err);
+      }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLock) {
+        wakeLock.release().then(() => { wakeLock = null; });
+      }
+    }
+
+    // Sound Beep / Chime when parent calls child
+    function playParentCallChime() {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+
+        // 3 loud cheerful rings
+        [0, 0.3, 0.6].forEach(delay => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(880, audioContext.currentTime + delay);
+          gain.gain.setValueAtTime(0.2, audioContext.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + delay + 0.25);
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.start(audioContext.currentTime + delay);
+          osc.stop(audioContext.currentTime + delay + 0.26);
+        });
+
+        if ('vibrate' in navigator) {
+          navigator.vibrate([300, 100, 300, 100, 300]);
+        }
+      } catch (e) {
+        console.warn('Audio call error:', e);
+      }
+    }
+
+    // Fetch Room Data on load
+    fetch(`/api/telemetry/${roomCode}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.childName) {
+          childName.textContent = data.childName;
+          childCategory.textContent = `${data.category || 'Inline Skate'} • ${data.weightKg || 30} kg`;
+        }
+      })
+      .catch(err => console.log('Fetch room info:', err));
+
+    // Send GPS Telemetry to Parent Dashboard
+    async function sendTelemetry(coords) {
+      const now = Date.now();
+      let calculatedSpeed = 0;
+
+      if (coords.speed !== null && coords.speed !== undefined && !isNaN(coords.speed)) {
+        calculatedSpeed = Math.round(coords.speed * 3.6 * 10) / 10;
+      } else if (lastLat !== null && lastFixTime) {
+        const deltaSeconds = (now - lastFixTime) / 1000;
+        const deltaMeters = calculateDistance(lastLat, lastLng, coords.latitude, coords.longitude);
+        if (deltaSeconds > 0) {
+          calculatedSpeed = Math.round((deltaMeters / deltaSeconds) * 3.6 * 10) / 10;
+        }
+      }
+
+      if (lastLat !== null) {
+        const dM = calculateDistance(lastLat, lastLng, coords.latitude, coords.longitude);
+        if (dM > 0.5) { // filter micro GPS drift
+          totalDistanceMeters += Math.round(dM);
+        }
+      }
+
+      lastLat = coords.latitude;
+      lastLng = coords.longitude;
+      lastFixTime = now;
+
+      // Update UI
+      liveSpeed.textContent = calculatedSpeed.toFixed(1);
+      liveDistance.textContent = `${totalDistanceMeters.toLocaleString('id-ID')} m`;
+      liveAccuracy.textContent = `± ${Math.round(coords.accuracy * 10) / 10} m`;
+
+      try {
+        const payload = {
+          roomCode: roomCode,
+          lat: coords.latitude,
+          lng: coords.longitude,
+          speed: calculatedSpeed,
+          heading: coords.heading || 0,
+          altitude: coords.altitude || 0,
+          accuracy: coords.accuracy,
+          battery: batteryLevel,
+          isSkating: isTracking,
+          timestamp: new Date().toLocaleTimeString('id-ID')
+        };
+
+        const res = await fetch('/api/telemetry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+        if (result.shouldPing) {
+          parentAlertModal.style.display = 'flex';
+          playParentCallChime();
+        }
+
+        connText.textContent = 'TERHUBUNG KE HP ORANG TUA';
+      } catch (err) {
+        connText.textContent = 'MENYAMBUNGKAN ULANG...';
+      }
+    }
+
+    // Start / Stop Tracking Toggle
+    btnToggle.addEventListener('click', () => {
+      if (!isTracking) {
+        // START TRACKING
+        if (!navigator.geolocation) {
+          alert('Sensor GPS tidak didukung pada browser ini.');
+          return;
+        }
+
+        isTracking = true;
+        startTime = Date.now();
+        requestWakeLock();
+
+        btnToggle.className = 'btn-toggle-tracking stop';
+        btnActionText.textContent = 'JEDA LATIHAN ⏸️';
+
+        timerInterval = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+          const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+          const s = String(elapsed % 60).padStart(2, '0');
+          liveDuration.textContent = `${h}:${m}:${s}`;
+        }, 1000);
+
+        watchId = navigator.geolocation.watchPosition(
+          (pos) => sendTelemetry(pos.coords),
+          (err) => {
+            console.warn('GPS Watch error:', err.message);
+            liveAccuracy.textContent = 'GPS Lemah';
+          },
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+        );
+      } else {
+        // STOP / PAUSE TRACKING
+        isTracking = false;
+        releaseWakeLock();
+        if (watchId) {
+          navigator.geolocation.clearWatch(watchId);
+          watchId = null;
+        }
+        if (timerInterval) {
+          clearInterval(timerInterval);
+        }
+
+        btnToggle.className = 'btn-toggle-tracking start';
+        btnActionText.textContent = 'LANJUTKAN MELUNCUR ⛸️';
+        liveSpeed.textContent = '0.0';
+      }
+    });
+
+    // Dismiss parent ping alert
+    btnAckPing.addEventListener('click', () => {
+      parentAlertModal.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

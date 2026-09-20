@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkateKids Track - Monitoring Latihan Sepatu Roda Anak Real-Time</title>
+  <meta name="description" content="Dashboard pemantauan latihan sepatu roda (inline skate) anak secara real-time langsung dari GPS HP anak.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navbar -->
+    <header class="top-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-person-skating pulse-icon"></i>
+        </div>
+        <div class="brand-info">
+          <h1>SkateKids <span>Track</span></h1>
+          <span class="brand-badge">LIVE REAL-TIME CHILD MONITOR</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <!-- Active Device Badge -->
+        <div class="device-selector-wrapper">
+          <i class="fa-solid fa-mobile-screen icon-cyan"></i>
+          <span style="font-weight: 700; color: var(--text-pure);" id="activeChildLabel">HP Anak: Menunggu Terhubung...</span>
+        </div>
+
+        <!-- Connect Child Phone Button -->
+        <button class="btn btn-connect-child" id="btnOpenPairingModal">
+          <i class="fa-solid fa-qrcode"></i>
+          <span>+ Hubungkan HP Anak (QR Code)</span>
+        </button>
+      </div>
+
+      <div class="header-status">
+        <div class="status-indicator offline" id="globalConnIndicator">
+          <span class="pulse-dot"></span>
+          <span id="connStatusText">MENUNGGU HP ANAK</span>
+        </div>
+        <div class="time-widget">
+          <i class="fa-regular fa-clock"></i>
+          <span id="liveClock">00:00:00 WIB</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Layout -->
+    <main class="dashboard-grid">
+      <!-- Left Sidebar: Child Profile & Real Safety Monitoring -->
+      <aside class="sidebar-panel">
+        <!-- Child Athlete Profile Card -->
+        <div class="glass-card device-profile-card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-user-astronaut"></i> Profil Atlet Cilik</span>
+            <span class="badge badge-neutral" id="skateActivityBadge">STANDBY</span>
+          </div>
+          <div class="device-quick-info">
+            <div class="device-avatar" id="deviceAvatarIcon">
+              <i class="fa-solid fa-person-skating"></i>
+            </div>
+            <div class="device-names">
+              <h3 id="currentDeviceName">Anak Saya</h3>
+              <p id="currentDevicePlate" class="mono-text">Sepatu Roda / Inline Skate</p>
+            </div>
+          </div>
+          
+          <div class="stats-row">
+            <div class="stat-pill">
+              <i class="fa-solid fa-battery-three-quarters icon-green"></i>
+              <div class="stat-meta">
+                <span class="stat-label">Baterai HP</span>
+                <span class="stat-value" id="batteryLevel">--%</span>
+              </div>
+            </div>
+            <div class="stat-pill">
+              <i class="fa-solid fa-signal icon-cyan"></i>
+              <div class="stat-meta">
+                <span class="stat-label">Sinyal GPS</span>
+                <span class="stat-value" id="signalStrength">-- dBm</span>
+              </div>
+            </div>
+            <div class="stat-pill">
+              <i class="fa-solid fa-heart-pulse icon-red"></i>
+              <div class="stat-meta">
+                <span class="stat-label">Detak Jantung</span>
+                <span class="stat-value" id="heartRateValue">-- BPM</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Child Calling / Ping Buzzer -->
+          <button class="btn btn-call-child" id="btnPingChild" title="Kirim sinyal dering ke HP anak">
+            <i class="fa-solid fa-bell-concierge"></i>
+            <span>Panggil Anak (Bunyikan HP Anak)</span>
+          </button>
+        </div>
+
+        <!-- Safety Zone (Geofence) Card -->
+        <div class="glass-card geofence-card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-shield-halved"></i> Zona Aman Latihan</span>
+            <span class="badge badge-success" id="geofenceStatusBadge">AKTIF</span>
+          </div>
+          <div class="geofence-body">
+            <div class="geofence-indicator">
+              <i class="fa-solid fa-circle-check text-success"></i>
+              <span id="geofenceText">Zona aman radius <span id="geofenceRadiusText">200m</span> dari titik awal meluncur.</span>
+            </div>
+            <div class="geofence-meta">
+              <span>Jarak ke Titik Awal: <strong class="mono-text" id="distanceToParent">0 meter</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real Coordinates & Location Card -->
+        <div class="glass-card location-card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-location-dot"></i> Titik Koordinat GPS Nyata</span>
+            <button class="btn-icon" id="btnCopyCoords" title="Salin Koordinat"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <div class="coords-display">
+            <div class="coord-item">
+              <span class="coord-label">Latitude</span>
+              <span class="coord-value mono-text" id="valLatitude">--.------</span>
+            </div>
+            <div class="coord-item">
+              <span class="coord-label">Longitude</span>
+              <span class="coord-value mono-text" id="valLongitude">---.------</span>
+            </div>
+          </div>
+          <div class="address-box">
+            <i class="fa-solid fa-map-pin"></i>
+            <span id="currentAddress">Menunggu HP anak terhubung & mengirim sinyal GPS...</span>
+          </div>
+          <div class="altitude-heading-row">
+            <div class="micro-stat">
+              <span class="micro-label">Arah Luncur</span>
+              <span class="micro-value mono-text" id="valHeading">--°</span>
+            </div>
+            <div class="micro-stat">
+              <span class="micro-label">Akurasi GPS</span>
+              <span class="micro-value mono-text" id="valAccuracy">&plusmn; -- m</span>
+            </div>
+            <div class="micro-stat">
+              <span class="micro-label">Elevasi</span>
+              <span class="micro-value mono-text" id="valAltitude">-- m</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session Controls Card (Clean, 0 Simulation) -->
+        <div class="glass-card controls-card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-sliders"></i> Kontrol Sesi Latihan</span>
+            <span class="badge badge-neutral" id="simStatusBadge">REAL LIVE</span>
+          </div>
+          <div class="playback-btn-group" style="grid-template-columns: 1fr 1fr;">
+            <button id="btnCenterMap" class="btn btn-primary" title="Pusatkan Kamera ke Posisi Anak">
+              <i class="fa-solid fa-crosshairs"></i> Pusatkan
+            </button>
+            <button id="btnRestartSession" class="btn btn-secondary" title="Mulai Ulang Hitungan Latihan">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Reset Sesi
+            </button>
+          </div>
+        </div>
+
+        <!-- Safety & Incident Stream -->
+        <div class="glass-card alerts-card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-bell"></i> Pemberitahuan Keamanan</span>
+            <span id="alertCountBadge" class="badge badge-neutral">Normal</span>
+          </div>
+          <div class="alert-stream" id="alertStream">
+            <div class="alert-item alert-info">
+              <i class="fa-solid fa-circle-info"></i>
+              <div class="alert-content">
+                <span class="alert-title">Sistem Siap Digunakan</span>
+                <span class="alert-time">Klik "+ Hubungkan HP Anak" untuk mulai melacak secara live</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center & Right Workspace -->
+      <section class="main-telemetry-area">
+        <!-- 4 Key Skating Metrics Row: Speed, Distance, Lap Counter, Fitness -->
+        <div class="metrics-grid">
+          <!-- Metric 1: Kecepatan Meluncur (Speedometer) -->
+          <div class="glass-card metric-card metric-speed">
+            <div class="metric-top">
+              <div class="metric-icon-box">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <span class="metric-tag" id="speedStatusTag">STANDBY</span>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value mono-text" id="metricSpeedValue">0.0</span>
+              <span class="metric-unit" id="metricSpeedUnit">km/jam</span>
+            </div>
+            <div class="metric-footer">
+              <span>Maks: <strong id="metricMaxSpeed" class="mono-text">0.0 km/jam</strong></span>
+              <span>Rata2: <strong id="metricAvgSpeed" class="mono-text">0.0 km/jam</strong></span>
+            </div>
+          </div>
+
+          <!-- Metric 2: Total Jarak Latihan (Jarak Tempuh Riil) -->
+          <div class="glass-card metric-card metric-distance">
+            <div class="metric-top">
+              <div class="metric-icon-box cyan">
+                <i class="fa-solid fa-person-running"></i>
+              </div>
+              <span class="metric-tag cyan">JARAK LATIHAN</span>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value mono-text" id="metricTotalDistance">0</span>
+              <span class="metric-unit" id="distanceUnitLabel">meter</span>
+            </div>
+            <div class="metric-footer">
+              <span>Setara: <strong id="metricDistanceKm" class="mono-text">0.00 km</strong></span>
+              <span class="icon-muted"><i class="fa-solid fa-award"></i> Akumulasi Riil</span>
+            </div>
+          </div>
+
+          <!-- Metric 3: Penghitung Putaran (Lap Counter Riil) -->
+          <div class="glass-card metric-card metric-trip">
+            <div class="metric-top">
+              <div class="metric-icon-box amber">
+                <i class="fa-solid fa-flag-checkered"></i>
+              </div>
+              <button class="btn-mini-reset" id="btnResetTrip" title="Reset Hitungan Putaran">
+                <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+              </button>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value mono-text" id="metricLapCount">0</span>
+              <span class="metric-unit">Putaran (Laps)</span>
+            </div>
+            <div class="metric-footer">
+              <span>Waktu Lap Terakhir: <strong id="lastLapTime" class="mono-text">--:-- dtk</strong></span>
+              <span>Terbaik: <strong class="text-success mono-text" id="bestLapTime">--:-- dtk</strong></span>
+            </div>
+          </div>
+
+          <!-- Metric 4: Kebugaran & Waktu Latihan -->
+          <div class="glass-card metric-card metric-time">
+            <div class="metric-top">
+              <div class="metric-icon-box purple">
+                <i class="fa-solid fa-fire"></i>
+              </div>
+              <span class="metric-tag purple">KEBUGARAN</span>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value mono-text" id="metricCalories">0</span>
+              <span class="metric-unit">kkal terbakar</span>
+            </div>
+            <div class="metric-footer">
+              <span>Meluncur: <strong id="metricTripDuration" class="mono-text">00:00:00</strong></span>
+              <span>Istirahat: <strong id="metricIdleDuration" class="mono-text">00:00:00</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Map & Gauge Visualization Row -->
+        <div class="visualizer-row">
+          <!-- Left: Main Interactive Map Viewport -->
+          <div class="glass-card map-container-card">
+            <div class="map-toolbar">
+              <div class="map-toolbar-left">
+                <span class="map-title"><i class="fa-solid fa-location-crosshairs"></i> Posisi Nyata Anak di Peta</span>
+                <span class="map-coords-badge" id="mapLiveBadge">
+                  <i class="fa-solid fa-circle pulse-dot-small"></i> <span id="mapHeadingBadge">Menunggu GPS...</span>
+                </span>
+              </div>
+              <div class="map-toolbar-right">
+                <!-- Map Layer Switcher Buttons -->
+                <div class="map-layer-toggles">
+                  <button class="map-layer-btn active" data-layer="dark" title="Peta Gelap">Dark</button>
+                  <button class="map-layer-btn" data-layer="osm" title="Peta Standar">Street</button>
+                  <button class="map-layer-btn" data-layer="satellite" title="Satelit Esri">Satelit</button>
+                </div>
+                <!-- Follow Mode Toggle -->
+                <button class="map-tool-btn active" id="btnToggleFollow" title="Kunci Kamera ke Anak">
+                  <i class="fa-solid fa-crosshairs"></i>
+                </button>
+                <!-- Clear Trail -->
+                <button class="map-tool-btn" id="btnClearTrail" title="Bersihkan Jejak Lintasan">
+                  <i class="fa-solid fa-eraser"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Leaflet Map Mount Point -->
+            <div id="map" class="map-viewport"></div>
+
+            <!-- Floating Map Legend -->
+            <div class="map-floating-overlay">
+              <div class="legend-item">
+                <span class="legend-color legend-green"></span> <span>0-12 km/h (Santai)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color legend-blue"></span> <span>13-22 km/h (Latihan)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color legend-orange"></span> <span>23-28 km/h (Cepat)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color legend-red"></span> <span>> 28 km/h (Sprint)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Circular Speedometer & Telemetry Gauge for Roller Skating -->
+          <div class="glass-card gauge-panel-card">
+            <div class="card-header">
+              <span class="card-title"><i class="fa-solid fa-gauge-high"></i> Speedometer Sepatu Roda</span>
+              <div class="unit-switch">
+                <button class="unit-btn active" id="unitKmh">KM/H</button>
+                <button class="unit-btn" id="unitMph">MPH</button>
+              </div>
+            </div>
+
+            <!-- Circular SVG Speedometer (Scaled 0 - 45 km/h for inline skating) -->
+            <div class="speedometer-container">
+              <div class="speedometer-svg-wrapper">
+                <svg viewBox="0 0 240 240" class="speedometer-svg">
+                  <!-- Background Track Arc -->
+                  <circle cx="120" cy="120" r="95" class="gauge-bg-arc" />
+                  
+                  <!-- Warning Zone Track Arc (>28 km/h high sprint zone) -->
+                  <circle cx="120" cy="120" r="95" class="gauge-warning-arc" />
+                  
+                  <!-- Dynamic Glowing Progress Arc -->
+                  <circle cx="120" cy="120" r="95" class="gauge-fill-arc" id="gaugeFillArc" />
+                  
+                  <!-- Center Dial Info -->
+                  <g class="gauge-center-text">
+                    <text x="120" y="115" class="gauge-digit mono-text" id="gaugeSpeedDigit">0.0</text>
+                    <text x="120" y="140" class="gauge-unit" id="gaugeSpeedUnit">KM/H</text>
+                    <text x="120" y="162" class="gauge-substatus" id="gaugeStatusText">STANDBY</text>
+                  </g>
+                </svg>
+                
+                <!-- Speedometer Needle Pointer -->
+                <div class="gauge-needle" id="gaugeNeedle"></div>
+                <div class="gauge-needle-cap"></div>
+              </div>
+
+              <!-- Speedometer Scale Numbers: 0, 10, 20, 30, 40, 45 -->
+              <div class="speedometer-scale">
+                <span>0</span>
+                <span>10</span>
+                <span>20</span>
+                <span>30</span>
+                <span>40</span>
+                <span>45</span>
+              </div>
+            </div>
+
+            <!-- Mini Live Speed Chart (0 - 35 km/h) -->
+            <div class="speed-chart-wrapper">
+              <div class="chart-header">
+                <span><i class="fa-solid fa-chart-line"></i> Irama Kecepatan Riil</span>
+                <span class="chart-peak mono-text" id="chartPeakLabel">Puncak: 0.0 km/h</span>
+              </div>
+              <div class="chart-canvas-box">
+                <canvas id="speedTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Training Session Log Table & Data Export -->
+        <div class="glass-card telemetry-log-card">
+          <div class="table-header-row">
+            <div class="table-title">
+              <i class="fa-solid fa-clipboard-list"></i>
+              <span>Log Data Riil GPS Anak</span>
+              <span class="table-count mono-text" id="logCountBadge">(0 catatan)</span>
+            </div>
+            <div class="table-actions">
+              <button class="btn btn-outline" id="btnExportCSV">
+                <i class="fa-solid fa-file-csv"></i> Unduh Laporan (CSV)
+              </button>
+              <button class="btn btn-outline" id="btnExportJSON">
+                <i class="fa-solid fa-file-code"></i> Ekspor JSON
+              </button>
+              <button class="btn btn-outline danger" id="btnClearLogs">
+                <i class="fa-solid fa-trash-can"></i> Bersihkan
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="telemetry-table" id="telemetryTable">
+              <thead>
+                <tr>
+                  <th>Waktu</th>
+                  <th>Nama Atlet</th>
+                  <th>Kecepatan</th>
+                  <th>Jarak Tempuh</th>
+                  <th>Putaran Ke-</th>
+                  <th>Koordinat Lintasan</th>
+                  <th>Arah Luncur</th>
+                  <th>Detak Jantung</th>
+                  <th>Status Gerak</th>
+                </tr>
+              </thead>
+              <tbody id="telemetryTableBody">
+                <!-- Data riil akan otomatis muncul saat HP anak mengirim sinyal -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal Pairing HP Anak -->
+    <div class="modal-overlay" id="pairingModalOverlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <i class="fa-solid fa-qrcode icon-cyan"></i>
+            <div>
+              <h3>Hubungkan HP Anak (Mode Pelacak)</h3>
+              <p class="modal-subtitle">Scan QR Code atau bagikan link ini ke HP anak Anda</p>
+            </div>
+          </div>
+          <button class="btn-close-modal" id="btnClosePairingModal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="pairing-content">
+            <!-- Left: QR Code Display -->
+            <div class="qr-container">
+              <div class="qr-box">
+                <img id="qrCodeImage" src="" alt="QR Code Link HP Anak">
+              </div>
+              <span class="room-code-tag" id="displayRoomCode">KODE: SKATE-8821</span>
+              <div class="conn-sync-status waiting" id="modalConnStatus">
+                <span class="pulse-dot"></span>
+                <span id="modalConnStatusText">Menunggu HP anak membuka link...</span>
+              </div>
+            </div>
+
+            <!-- Right: Direct Link & Setup Form -->
+            <div class="pairing-details">
+              <label class="form-label">Link Langsung untuk HP Anak:</label>
+              <div class="copy-link-group">
+                <input type="text" id="txtTrackerUrl" readonly class="custom-input mono-text" value="Memuat link...">
+                <button class="btn btn-primary" id="btnCopyTrackerUrl" title="Salin Link">
+                  <i class="fa-regular fa-copy"></i> Salin
+                </button>
+              </div>
+
+              <div class="share-whatsapp-box">
+                <a id="btnShareWhatsApp" href="#" target="_blank" class="btn btn-whatsapp">
+                  <i class="fa-brands fa-whatsapp"></i> Kirim Link via WhatsApp
+                </a>
+              </div>
+
+              <hr class="modal-divider">
+
+              <!-- Form Daftarkan Anak Baru -->
+              <h4 style="font-size: 0.85rem; margin-bottom: 8px; color: var(--text-pure);">
+                <i class="fa-solid fa-user-pen"></i> Sesuaikan Profil Anak:
+              </h4>
+              <div class="form-row">
+                <div class="form-col">
+                  <label>Nama Anak:</label>
+                  <input type="text" id="inputChildName" class="custom-input" value="Kevin Pratama">
+                </div>
+                <div class="form-col">
+                  <label>Usia (Tahun):</label>
+                  <input type="number" id="inputChildAge" class="custom-input" value="9" min="4" max="18">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label>Berat Badan (kg):</label>
+                  <input type="number" id="inputChildWeight" class="custom-input" value="32" min="15" max="80">
+                </div>
+                <div class="form-col">
+                  <label>Batas Kecepatan Aman:</label>
+                  <input type="number" id="inputChildMaxSpeed" class="custom-input" value="28" min="15" max="45">
+                </div>
+              </div>
+              <button class="btn btn-secondary" id="btnUpdateChildProfile" style="margin-top: 10px; width: 100%;">
+                <i class="fa-solid fa-arrows-rotate"></i> Buat Kode / Ruangan Baru
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span>SkateKids Track &bull; Monitoring Latihan Sepatu Roda Anak v2.5</span> &bull; 
+        <span>Algoritma Geodesik Haversine &bull; Leaflet &bull; Real-Time Phone Sync</span>
+      </div>
+      <div class="footer-right">
+        <label class="toggle-audio-label">
+          <input type="checkbox" id="chkAudioAlerts" checked>
+          <span><i class="fa-solid fa-volume-high"></i> Suara Peringatan Keamanan & Lap</span>
+        </label>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Application Modules -->
+  <script src="js/telemetry-engine.js"></script>
+  <script src="js/map-manager.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
