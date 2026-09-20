@@ -1,0 +1,16 @@
+{
+  "name": "SkateKids Track",
+  "short_name": "SkateKids",
+  "start_url": "/tracker.html",
+  "display": "standalone",
+  "background_color": "#070a13",
+  "theme_color": "#070a13",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3655/3655581.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
