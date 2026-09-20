@@ -668,6 +668,123 @@ body {
   border: 1px solid var(--cyan-primary) !important;
 }
 
+/* ==========================================================================
+   Leaflet Custom Skater GPS Marker & Radar Ping
+   ========================================================================== */
+.skater-custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
+}
+
+.vehicle-marker-wrapper {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* Pulsing animated radar ring */
+.vehicle-radar-ping {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(0, 242, 254, 0.2);
+  border: 2px solid var(--cyan-primary);
+  animation: radarPulse 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes radarPulse {
+  0% {
+    width: 24px;
+    height: 24px;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  60% {
+    width: 70px;
+    height: 70px;
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  100% {
+    width: 95px;
+    height: 95px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
+}
+
+/* Marker Core Icon Circle */
+.vehicle-marker-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f2fe, #10b981);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.95), 0 4px 12px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #070a13;
+  font-size: 1.15rem;
+  z-index: 5;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.vehicle-marker-core i {
+  color: #060911;
+  font-size: 1.15rem;
+}
+
+/* Direction Heading Pointer Arrow */
+.vehicle-heading-arrow {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid #00f2fe;
+  filter: drop-shadow(0 -2px 4px rgba(0, 242, 254, 0.9));
+}
+
+/* Floating Name & Speed Badge above Marker */
+.vehicle-marker-label {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(9, 15, 28, 0.92);
+  color: #00f2fe;
+  border: 1px solid rgba(0, 242, 254, 0.5);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 10;
+}
+
 /* Map Floating Legend */
 .map-floating-overlay {
   position: absolute;
@@ -2591,12 +2708,16 @@ class MapManager {
       this.updateGeofenceCircle(telemetry.lat, telemetry.lng, 200);
     }
 
+    const childName = (telemetry.device && telemetry.device.name) ? telemetry.device.name : 'Anak Saya';
+    const childSpeed = telemetry.speed !== undefined ? `${telemetry.speed} km/j` : '0 km/j';
+
     // Create or update marker
     if (!this.skaterMarker) {
       const customIcon = L.divIcon({
         className: 'skater-custom-div-icon',
         html: `
           <div class="vehicle-marker-wrapper">
+            <div class="vehicle-marker-label" id="markerFloatingLabel">🧒 ${childName}</div>
             <div class="vehicle-radar-ping"></div>
             <div class="vehicle-marker-core" id="mapMarkerCore">
               <div class="vehicle-heading-arrow"></div>
@@ -2604,17 +2725,25 @@ class MapManager {
             </div>
           </div>
         `,
-        iconSize: [44, 44],
-        iconAnchor: [22, 22]
+        iconSize: [50, 50],
+        iconAnchor: [25, 25]
       });
 
-      this.skaterMarker = L.marker(latLng, { icon: customIcon }).addTo(this.map);
+      this.skaterMarker = L.marker(latLng, { 
+        icon: customIcon,
+        zIndexOffset: 1000 
+      }).addTo(this.map);
     } else {
       this.skaterMarker.setLatLng(latLng);
 
       const coreEl = document.getElementById('mapMarkerCore');
       if (coreEl && telemetry.heading !== undefined) {
         coreEl.style.transform = `translate(-50%, -50%) rotate(${telemetry.heading}deg)`;
+      }
+
+      const labelEl = document.getElementById('markerFloatingLabel');
+      if (labelEl) {
+        labelEl.textContent = `🧒 ${childName} • ${childSpeed}`;
       }
     }
 
